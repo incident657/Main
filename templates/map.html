@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_e7dd81da809676361fb371ead8d5adc9 {
+                #map_255716d8950843f0fb0daca30572c8f8 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,14 +39,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_e7dd81da809676361fb371ead8d5adc9" ></div>
+            <div class="folium-map" id="map_255716d8950843f0fb0daca30572c8f8" ></div>
         
 </body>
 <script>
     
     
-            var map_e7dd81da809676361fb371ead8d5adc9 = L.map(
-                "map_e7dd81da809676361fb371ead8d5adc9",
+            var map_255716d8950843f0fb0daca30572c8f8 = L.map(
+                "map_255716d8950843f0fb0daca30572c8f8",
                 {
                     center: [14.5995, 120.9842],
                     crs: L.CRS.EPSG3857,
@@ -60,13 +60,34 @@
 
         
     
-            var tile_layer_34c35d7ae9283eafd3f3930a0339a503 = L.tileLayer(
+            var tile_layer_0011b5ddf7d36d4b5edf142b44a32654 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
             );
         
     
-            tile_layer_34c35d7ae9283eafd3f3930a0339a503.addTo(map_e7dd81da809676361fb371ead8d5adc9);
+            tile_layer_0011b5ddf7d36d4b5edf142b44a32654.addTo(map_255716d8950843f0fb0daca30572c8f8);
         
+    
+            var marker_77ed23f820c930fb035ad7d4ea88abfe = L.marker(
+                [11.470012875000002, 123.09686387500003],
+                {}
+            ).addTo(map_255716d8950843f0fb0daca30572c8f8);
+        
+    
+        var popup_923b506326d8aece6ac639726387c0fc = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_25479b2237a434f669db31c2a165e3e4 = $(`<div id="html_25479b2237a434f669db31c2a165e3e4" style="width: 100.0%; height: 100.0%;">gada</div>`)[0];
+                popup_923b506326d8aece6ac639726387c0fc.setContent(html_25479b2237a434f669db31c2a165e3e4);
+            
+        
+
+        marker_77ed23f820c930fb035ad7d4ea88abfe.bindPopup(popup_923b506326d8aece6ac639726387c0fc)
+        ;
+
+        
+    
 </script>
 </html>
