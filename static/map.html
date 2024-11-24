@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reported Locations</h1>
+    <div id="map"></div>
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([14.5995, 120.9842], 12); // Default location and zoom level
+
+        // Add a tile layer (Map background)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add markers (these will be dynamically populated in your backend)
+        var reports = [
+            {title: "Sample Report 1", location: [14.5995, 120.9842]},
+            {title: "Sample Report 2", location: [14.6095, 120.9942]}
+        ];
+
+        // Loop through the reports and add them as markers
+        reports.forEach(function(report) {
+            L.marker(report.location).addTo(map)
+             .bindPopup("<b>" + report.title + "</b>")
+             .openPopup();
+        });
+    </script>
+</body>
+</html>

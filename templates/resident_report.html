@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Incident Report</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('tree.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 20px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .container p {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        .btn-submit {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #45a049;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Incident Report Form</h1>
+        <p>Fill in the details below to report an incident in your area.</p>
+        <form action="/submit_report" method="POST">
+            <!-- Report Title -->
+            <div class="form-group">
+                <label for="report_title">Title of the Report</label>
+                <input type="text" id="report_title" name="report_title" placeholder="Enter the title" required>
+            </div>
+
+            <!-- Incident Type -->
+            <div class="form-group">
+                <label for="incident_type">Incident Type</label>
+                <select id="incident_type" name="incident_type" onchange="toggleIncidentTypeFields()" required>
+                    <option value="medical_emergency">Health and Safety Incidents</option>
+                    <option value="accident">Criminal Incidents</option>
+                    <option value="security_issue">Environmental Incidents</option>
+                    <option value="public_disturbances">Public Disturbances</option>
+                    <option value="infrastructure">Infrastructure Issues</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Other Incident Type -->
+            <div class="form-group" id="other_incident" style="display:none;">
+                <label for="other_description">Please describe the incident type</label>
+                <textarea id="other_description" name="other_description" rows="4" placeholder="Describe the type of incident"></textarea>
+            </div>
+
+            <!-- Severity Type -->
+            <div class="form-group">
+                <label for="severity_type">Severity Type</label>
+                <select id="severity_type" name="severity_type" required>
+                    <option value="critical">Critical</option>
+                    <option value="high">High (Serious Impact)</option>
+                    <option value="medium">Medium (Moderate Impact)</option>
+                    <option value="low">Low (Minor Impact)</option>
+                </select>
+            </div>
+
+            <!-- Urgency Type -->
+            <div class="form-group">
+                <label for="urgency_type">Urgency Type</label>
+                <select id="urgency_type" name="urgency_type" required>
+                    <option value="immediate">Immediate</option>
+                    <option value="high_urgency">High Urgency (Action Needed Soon)</option>
+                    <option value="moderate_urgency">Moderate Urgency (Reasonable Time)</option>
+                    <option value="low_urgency">Low Urgency (Can Be Delayed)</option>
+                </select>
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location_choice">How would you like to provide your location?</label>
+                <select id="location_choice" name="location_choice" onchange="toggleLocationFields()" required>
+                    <option value="manual">Manually Enter Location</option>
+                    <option value="auto">Allow Us to Detect Your Location</option>
+                </select>
+            </div>
+
+            <!-- Manual Location Input -->
+            <div class="form-group" id="manual_location" style="display:none;">
+                <label for="report_location">Write the location</label>
+                <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
+            </div>
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+
+            <!-- Date and Time -->
+            <div class="form-group">
+                <label for="report_date">Date and Time of Incident</label>
+                <input type="datetime-local" id="report_date" name="report_date" required>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="report_description">Incident Description</label>
+                <textarea id="report_description" name="report_description" rows="4" placeholder="Describe the incident in detail" required></textarea>
+            </div>
+
+            <!-- Anonymous Submission -->
+            <div class="form-group">
+                <label for="anonymous">
+                    <input type="checkbox" id="anonymous" name="anonymous">
+                    Submit Anonymously
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">Submit Report</button>
+        </form>
+        <div class="footer-note">
+            <p>Your report helps us maintain a safe and secure community.</p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle visibility of the "Other Incident" description field
+        function toggleLocationFields() {
+            var locationChoice = document.getElementById('location_choice').value;
+            var manualLocation = document.getElementById('manual_location');
+        
+            if (locationChoice === 'manual') {
+                manualLocation.style.display = 'block';
+                document.getElementById('latitude').value = '';
+                document.getElementById('longitude').value = '';
+            } else {
+                manualLocation.style.display = 'none';
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        document.getElementById('latitude').value = position.coords.latitude;
+                        document.getElementById('longitude').value = position.coords.longitude;
+                    }, function () {
+                        alert('Unable to retrieve your location.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by your browser.');
+                }
+            }
+        }
+        
+    </script>
+</body>
+</html>
