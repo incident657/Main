@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # Use environment variables for sensitive data
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///reports.db')  # Default SQLite database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost:5432/mydatabase' # Default SQLite database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
 
@@ -201,6 +201,10 @@ def update_incident_type(id):
 def locate_report(report_id):
     # Your logic here
     return f"Locate report with ID: {report_id}"
+
+@app.route('/health')
+def health_check():
+    return 'OK', 200
 
 if __name__ == "__main__":
     app.run(debug=True)
