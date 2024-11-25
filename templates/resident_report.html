@@ -191,6 +191,16 @@
     </div>
 
     <script>
+
+        function toggleIncidentTypeFields() {
+            const incidentType = document.getElementById('incident_type').value;
+            const otherIncident = document.getElementById('other_incident');
+            if (incidentType === 'other') {
+                otherIncident.style.display = 'block';
+            } else {
+                otherIncident.style.display = 'none';
+            }
+        }
         // Toggle visibility of the "Other Incident" description field
         function toggleLocationFields() {
             var locationChoice = document.getElementById('location_choice').value;

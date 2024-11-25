@@ -184,6 +184,19 @@ def mark_as_done(id):
     db.session.commit()
     return redirect(url_for('admin_reports'))
 
+@app.route('/update_incident_type/<int:id>', methods=['POST'])
+def update_incident_type(id):
+    custom_incident = request.form.get('custom_incident')
+    if custom_incident:
+        # Update the report in the database
+        report = Report.query.get_or_404(id)
+        report.incident_type = custom_incident
+        db.session.commit()
+        flash('Incident type updated successfully.', 'success')
+    else:
+        flash('Custom incident type cannot be empty.', 'danger')
+    return redirect(url_for('admin_reports'))
+
 @app.route('/locate/<int:report_id>')
 def locate_report(report_id):
     # Your logic here
