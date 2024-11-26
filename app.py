@@ -5,6 +5,7 @@ from datetime import datetime
 import folium
 from geopy.geocoders import Nominatim
 import os
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -183,10 +184,48 @@ def search_reports():
     ).all() if search_query else Report.query.all()
     return render_template('admin_reports.html', reports=reports)
 
+@app.route('/getFilteredReports')
+def get_filtered_reports():
+    # Retrieve the filter values from the query parameters
+    date_filter = request.args.get('date')
+    category_filter = request.args.get('category')
+    status_filter = request.args.get('status')
+
+    # Build the query based on the provided filters
+    query = Report.query
+
+    if date_filter:
+        try:
+            # Convert the date string to a datetime object for comparison
+            date_obj = datetime.strptime(date_filter, '%Y-%m-%d')
+            query = query.filter(Report.timestamp >= date_obj)  # Filter reports by date
+        except ValueError:
+            pass  # Ignore if the date format is incorrect
+
+    if category_filter:
+        query = query.filter(Report.incident_type.ilike(f'%{category_filter}%'))  # Filter by category (incident_type)
+
+    if status_filter:
+        query = query.filter(Report.status.ilike(f'%{status_filter}%'))  # Filter by status
+
+    # Execute the query and get the filtered reports
+    reports = query.all()
+
+    # Return the filtered reports as JSON
+    reports_data = [{
+        'title': report.title,
+        'category': report.incident_type,  # Adjust this based on the actual category field
+        'status': report.status,
+        'date': report.timestamp.strftime('%Y-%m-%d'),
+        'description': report.description
+    } for report in reports]
+
+    return jsonify(reports_data)
+
 @app.route('/mark_as_done/<int:id>', methods=['POST'])
 def mark_as_done(id):
     report = Report.query.get_or_404(id)
-    report.status = 'done'
+    report.status = 'Resolved'
     db.session.commit()
     return redirect(url_for('admin_reports'))
 

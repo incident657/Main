@@ -215,7 +215,7 @@
                         <td>{{ "Yes" if report.anonymous else "No" }}</td>
                         <td>{{ report.status }}</td>
                         <td>
-                            {% if report.status != 'done' %}
+                            {% if report.status != 'Resolved' %}
                             <form action="{{ url_for('mark_as_done', id=report.id) }}" method="POST">
                                 <button type="submit">Mark as Done</button>
                             </form>
@@ -257,7 +257,81 @@
         </div>
     </div>
 
+    <div>
+        <!-- Filter by Date -->
+        <label for="filter-date">Filter by Date:</label>
+        <input type="date" id="filter-date" name="filter-date">
+      
+        <!-- Filter by Category -->
+        <label for="filter-category">Filter by Category:</label>
+        <select id="filter-category" name="filter-category">
+          <option value="">All Categories</option>
+          <option value="Health and Safety">Health and Safety</option>
+          <option value="Criminal Incidents">Criminal Incidents</option>
+          <option value="Environmental Incidents">Environmental Incidents</option>
+          <option value="Public Disturbances">Public Disturbances</option>
+          <option value="Infrastructure Issues">Infrastructure Issues</option>
+          <!-- Add more categories as needed -->
+        </select>
+      
+        <!-- Filter by Status -->
+        <label for="filter-status">Filter by Status:</label>
+        <select id="filter-status" name="filter-status">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      
+        <!-- Apply Filters Button -->
+        <button id="apply-filters" onclick="applyFilters()">Apply Filters</button>
+      </div>      
+
     <script>
+        function applyFilters() {
+            // Get the filter values
+            const date = document.getElementById('filter-date').value;
+            const category = document.getElementById('filter-category').value;
+            const status = document.getElementById('filter-status').value;
+          
+            // Prepare the query parameters based on the selected filters
+            let queryParams = `?`;
+            if (date) queryParams += `date=${date}&`;
+            if (category) queryParams += `category=${category}&`;
+            if (status) queryParams += `status=${status}&`;
+          
+            // Remove trailing '&' if any
+            queryParams = queryParams.slice(0, -1);
+          
+            // Now, you can use these query parameters to make an AJAX request or reload the page with the filtered data
+            // For example, using fetch to get the filtered reports:
+            fetch(`/getFilteredReports${queryParams}`)
+              .then(response => response.json())
+              .then(data => {
+                // Update the report list based on the filtered data
+                updateReportsList(data);
+              })
+              .catch(error => console.error('Error fetching filtered reports:', error));
+          }
+          
+          function updateReportsList(reports) {
+            const reportsList = document.getElementById('reports-list');
+            reportsList.innerHTML = ''; // Clear the current list
+          
+            // Loop through the reports and create HTML elements to display them
+            reports.forEach(report => {
+              const reportElement = document.createElement('div');
+              reportElement.classList.add('report-item');
+              reportElement.innerHTML = `
+                <p><strong>Title:</strong> ${report.title}</p>
+                <p><strong>Category:</strong> ${report.category}</p>
+                <p><strong>Status:</strong> ${report.status}</p>
+                <p><strong>Date:</strong> ${report.date}</p>
+                <p><strong>Description:</strong> ${report.description}</p>
+              `;
+              reportsList.appendChild(reportElement);
+            });
+          }
+          
         function locateResident(latitude, longitude) {
             if (latitude === null || longitude === null) {
                 document.getElementById('location-message').innerText = "Invalid location data.";
