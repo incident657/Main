@@ -134,17 +134,23 @@ def thank_you():
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
-    reports = Report.query.all()
-    for report in reports:
-        if report.timestamp:
-            report.date = report.timestamp.strftime('%Y-%m-%d')
-            report.time = report.timestamp.strftime('%H:%M')
-    warning_sign = any(
-        report.severity_type == 'critical' and report.urgency_type == 'immediate'
-        for report in reports
-    )
-    
-    return render_template('admin_reports.html', reports=reports, warning_sign=warning_sign)
+    try:
+        reports = Report.query.all()
+        # Add extra attributes for display
+        for report in reports:
+            if report.timestamp:
+                report.date = report.timestamp.strftime('%Y-%m-%d')
+                report.time = report.timestamp.strftime('%H:%M')
+        warning_sign = any(
+            report.severity_type == 'critical' and report.urgency_type == 'immediate'
+            for report in reports
+        )
+        return render_template('admin_reports.html', reports=reports, warning_sign=warning_sign)
+    except Exception as e:
+        app.logger.error(f"Error in admin_reports: {e}")
+        flash("An error occurred while fetching admin reports.", "error")
+        return render_template('error.html')  # Render an error page for graceful handling
+
 
 @app.route('/logout')
 def logout():
