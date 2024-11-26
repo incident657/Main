@@ -95,12 +95,12 @@ def submit_report():
     report_description = request.form['report_description']
     anonymous = request.form.get('anonymous') == 'on'
     incident_type = request.form['incident_type']
-    custom_incident_type = request.form.get('custom_incident_type', None) 
+    custom_incident_type = request.form.get('custom_incident_type', None)
     severity_type = request.form['severity_type']
     urgency_type = request.form['urgency_type']
     username = session.get('username') if not anonymous else None
 
-   # If "other" is selected, use the custom incident type if provided
+    # If "other" is selected, use the custom incident type if provided
     if incident_type == "other" and custom_incident_type:
         incident_type = custom_incident_type
 
@@ -125,6 +125,7 @@ def submit_report():
         anonymous=anonymous,
         username=username,
         incident_type=incident_type,
+        custom_incident_type=custom_incident_type,
         severity_type=severity_type,
         urgency_type=urgency_type,
     )
@@ -215,9 +216,5 @@ def health_check():
     return 'OK', 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-    import os
-
     port = int(os.environ.get('PORT', 5000))  # Get the port from the environment variable
-    app.run(host='0.0.0.0', port=port) 
+    app.run(host='0.0.0.0', port=port, debug=True)
