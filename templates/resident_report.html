@@ -120,7 +120,7 @@
             <!-- Other Incident Type -->
             <div class="form-group" id="other_incident" style="display:none;">
                 <label for="other_description">Please describe the incident type</label>
-                <textarea id="other_description" name="other_description" rows="4" placeholder="Describe the type of incident"></textarea>
+                <textarea id="other_description" name="custom_incident_type" rows="4" placeholder="Describe the type of incident"></textarea>
             </div>
 
             <!-- Severity Type -->
@@ -195,10 +195,13 @@
         function toggleIncidentTypeFields() {
             const incidentType = document.getElementById('incident_type').value;
             const otherIncident = document.getElementById('other_incident');
+            
+            // Show or hide the custom field based on selection
             if (incidentType === 'other') {
                 otherIncident.style.display = 'block';
             } else {
                 otherIncident.style.display = 'none';
+                document.getElementById('other_description').value = ''; // Clear the custom description if not needed
             }
         }
         // Toggle visibility of the "Other Incident" description field

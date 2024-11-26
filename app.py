@@ -29,7 +29,8 @@ class Report(db.Model):
     description = db.Column(db.Text)
     anonymous = db.Column(db.Boolean)
     username = db.Column(db.String(50))
-    incident_type = db.Column(db.String(50))
+    incident_type = db.Column(db.String(50), nullable=False)
+    custom_incident_type = db.Column(db.String(100), nullable=True) 
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
@@ -94,9 +95,14 @@ def submit_report():
     report_description = request.form['report_description']
     anonymous = request.form.get('anonymous') == 'on'
     incident_type = request.form['incident_type']
+    custom_incident_type = request.form.get('custom_incident_type', None) 
     severity_type = request.form['severity_type']
     urgency_type = request.form['urgency_type']
     username = session.get('username') if not anonymous else None
+
+   # If "other" is selected, use the custom incident type if provided
+    if incident_type == "other" and custom_incident_type:
+        incident_type = custom_incident_type
 
     try:
         timestamp = datetime.strptime(report_date, '%Y-%m-%dT%H:%M')

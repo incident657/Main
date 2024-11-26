@@ -203,7 +203,13 @@
                     <tr class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %}">
                         <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
                         <td>{{ report.title }}</td>
-                        <td>{{ report.incident_type }}</td>
+                        <td>
+                            {% if report.incident_type == 'other' and report.custom_incident_type %}
+                                {{ report.custom_incident_type }}
+                            {% else %}
+                                {{ report.incident_type }}
+                            {% endif %}
+                        </td>
                         <td>{{ report.severity_type }}</td>
                         <td>{{ report.urgency_type }}</td>
                         <td>{{ report.location }}</td>
