@@ -229,8 +229,8 @@
                                 {% if report.latitude is not none %}{{ report.latitude }}{% else %}null{% endif %}, 
                                 {% if report.longitude is not none %}{{ report.longitude }}{% else %}null{% endif %}
                             )">
-                                Locate
-                                <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary"></a>
+    
+                                <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary">Locate</a>
                             </button>
                         </td>
                         <td class="action-buttons">
