@@ -144,6 +144,8 @@ def admin_reports():
         for report in reports
     )
     
+    return render_template('admin_reports.html', reports=reports, warning_sign=warning_sign)
+
 @app.route('/logout')
 def logout():
     session.clear()
