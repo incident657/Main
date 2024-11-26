@@ -143,13 +143,7 @@ def admin_reports():
         report.severity_type == 'critical' and report.urgency_type == 'immediate'
         for report in reports
     )
-    map = folium.Map(location=[14.5995, 120.9842], zoom_start=12)
-    for report in reports:
-        if report.latitude and report.longitude:
-            folium.Marker(location=[report.latitude, report.longitude], popup=report.title).add_to(map)
-    map.save('templates/map.html')
-    return render_template('admin_reports.html', reports=reports, warning_sign=warning_sign)
-
+    
 @app.route('/logout')
 def logout():
     session.clear()
