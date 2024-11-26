@@ -128,7 +128,7 @@ def submit_report():
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template('thank_you.html')
+    return render_template('Thank_you.html')
 
 @app.route('/admin_reports')
 def admin_reports():
