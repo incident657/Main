@@ -193,9 +193,9 @@
                     <th>Time</th>
                     <th>Description</th>
                     <th>Anonymous</th>
-                    <th>Locate</th>
-                    <th>Actions</th>
                     <th>Status</th>
+                    <th>Actions</th>
+                    <th>Locate</th>
                 </tr>
             </thead>
             <tbody>
@@ -230,7 +230,7 @@
                                 {% if report.longitude is not none %}{{ report.longitude }}{% else %}null{% endif %}
                             )">
                                 Locate
-                                <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary">Locate</a>
+                                <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary"></a>
                             </button>
                         </td>
                         <td class="action-buttons">
