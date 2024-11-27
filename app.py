@@ -139,7 +139,7 @@ def submit_report():
     )
     db.session.add(new_report)
     db.session.commit()
-    return redirect('thank_you')
+    return redirect('Thank_you')
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
