@@ -133,7 +133,18 @@ def submit_report():
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template('Thank_you.html')
+    # Fetch last report for feedback
+    last_report = Report.query.order_by(Report.timestamp.desc()).first()
+    if last_report:
+        report_info = {
+            'title': last_report.title,
+            'description': last_report.description,
+            'location': last_report.location,
+            'incident_type': last_report.incident_type
+        }
+    else:
+        report_info = None
+    return render_template('thank_you.html', report_info=report_info)
 
 @app.route('/admin_reports')
 def admin_reports():
