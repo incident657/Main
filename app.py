@@ -19,6 +19,11 @@ app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+class Feedback(db.Model):
+    username = db.Column(db.String(50), nullable=True)  # Nullable for anonymous feedback
+    feedback = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    
 # Database model for reports
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -129,11 +134,25 @@ def submit_report():
     )
     db.session.add(new_report)
     db.session.commit()
-    return redirect('/thank_you')
+    return redirect('thank_you')
 
-@app.route('/thank_you')
-def thank_you():
-    return render_template('Thank_you.html')
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    username = session.get('username', None)
+    feedback_text = request.form.get('feedback')
+    if feedback_text:
+        feedback = Feedback(username=username, feedback=feedback_text)
+        db.session.add(feedback)
+        db.session.commit()
+        flash("Thank you for your feedback!", "success")
+    return redirect('/Thank_you')
+
+@app.route('/admin_feedbacks')
+def admin_feedbacks():
+    if session.get('role') != 'admin':
+        return redirect('/')
+    feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
+    return render_template('admin_feedbacks.html', feedbacks=feedbacks)
     
 @app.route('/admin_reports')
 def admin_reports():
