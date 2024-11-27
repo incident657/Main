@@ -196,38 +196,44 @@
             .notification-bell {
     position: relative;
     display: inline-block;
-    font-size: 24px; /* Adjust the bell icon size */
+    width: 40px; /* Define the width of the bell icon */
+    height: 40px; /* Define the height of the bell icon */
     cursor: pointer;
+}
+
+.notification-bell img {
+    width: 100%; /* Scale the image to fit the container */
+    height: 100%; /* Maintain the aspect ratio */
+    display: block; /* Ensure no extra space around the image */
 }
 
 .notification-bell .count {
     position: absolute;
-    top: -5px; /* Slightly adjust positioning */
-    right: -10px;
+    top: -5px; /* Adjust positioning of the notification count */
+    right: -5px; /* Fine-tune positioning for alignment */
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 2px 5px; /* Adjust padding for smaller size */
-    font-size: 11px; /* Make the count text slightly smaller */
+    padding: 2px 5px; /* Adjust padding to fit smaller notification text */
+    font-size: 12px; /* Slightly smaller text */
     font-weight: bold;
-    display: inline-block;
-    min-width: 18px; /* Ensure consistency with single or double digits */
+    min-width: 18px; /* Maintain consistency for single/double digits */
     text-align: center;
 }
 
 .notifications-dropdown {
     display: none; /* Initially hidden */
     position: absolute;
-    top: 35px; /* Position dropdown slightly below the bell */
+    top: 45px; /* Adjust dropdown position to align with bell size */
     right: 0;
     background: white;
-    border: 1px solid #ddd; /* Add a subtle border */
+    border: 1px solid #ddd; /* Subtle border for clarity */
     border-radius: 5px; /* Smooth edges */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    width: 260px; /* Slightly smaller width for compact look */
-    max-height: 300px; /* Reduced height to avoid overwhelming view */
-    overflow-y: auto; /* Scrollable for excess notifications */
+    width: 280px; /* Slightly adjusted width for a cleaner look */
+    max-height: 350px; /* Adjusted height for better UX */
+    overflow-y: auto; /* Enable scrolling for excess notifications */
 }
 
 .notifications-dropdown ul {
@@ -237,21 +243,20 @@
 }
 
 .notifications-dropdown ul li {
-    padding: 8px 12px; /* Compact padding for each item */
+    padding: 10px 15px; /* Adjust padding for better spacing */
     border-bottom: 1px solid #eee; /* Light divider between items */
     cursor: pointer;
     font-size: 14px; /* Standard font size for readability */
 }
 
 .notifications-dropdown ul li:hover {
-    background-color: #f9f9f9; /* Slightly lighter hover effect */
-    color: #333; /* Darker text on hover for contrast */
+    background-color: #f7f7f7; /* Subtle hover effect */
+    color: #333; /* Darker text on hover for visibility */
 }
 
 .notifications-dropdown ul li:last-child {
-    border-bottom: none; /* Remove border from last item */
+    border-bottom: none; /* Remove border for the last item */
 }
-
         
     </style>
 </head>
