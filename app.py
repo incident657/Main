@@ -139,7 +139,6 @@ def submit_report():
     )
     db.session.add(new_report)
     db.session.commit()
-    return redirect('Thank_you')
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -150,7 +149,7 @@ def submit_feedback():
         db.session.add(feedback)
         db.session.commit()
         flash("Thank you for your feedback!", "success")
-    return redirect('/Thank_you')
+    return redirect(url_for('Thank_you'))  # Use url_for for better maintainability
 
 @app.route('/admin_feedbacks')
 def admin_feedbacks():
