@@ -140,6 +140,10 @@ def submit_report():
     db.session.add(new_report)
     db.session.commit()
 
+@app.route('/Thank_you')
+def thank_you():
+    return render_template('Thank_you.html')  # Make sure the template exists
+
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     username = session.get('username', None)
@@ -149,7 +153,8 @@ def submit_feedback():
         db.session.add(feedback)
         db.session.commit()
         flash("Thank you for your feedback!", "success")
-    return redirect(url_for('Thank_you'))  # Use url_for for better maintainability
+    return redirect(url_for('thank_you'))  # Corrected: should match the function name of the route
+  # Use url_for for better maintainability
 
 @app.route('/admin_feedbacks')
 def admin_feedbacks():
