@@ -14,7 +14,7 @@
             color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
             background-color: white;
             padding: 30px;
@@ -49,6 +49,50 @@
         .logout-btn:hover {
             background-color: #c82333;
         }
+        .feedback-section, .audit-trail-section {
+            text-align: left;
+            margin-top: 30px;
+        }
+        .feedback-section textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-size: 1em;
+        }
+        .feedback-section button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .feedback-section button:hover {
+            background-color: #218838;
+        }
+        .audit-trail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .audit-trail-table th, .audit-trail-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .audit-trail-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+        .audit-trail-table td {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -62,10 +106,63 @@
             <p>Your report has been submitted with your identity.</p>
         {% endif %}
 
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h2>Feedback</h2>
+            <p>We value your input. If you'd like to provide feedback on how your incident was handled, please share your thoughts below:</p>
+            <form action="/submit_feedback" method="POST">
+                <textarea name="feedback" placeholder="Write your feedback here..."></textarea>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!-- Audit Trail Section -->
+        <div class="audit-trail-section">
+    <h2>Audit Trail</h2>
+    <p>Below is a record of actions taken regarding your submitted report for accountability:</p>
+    <table class="audit-trail-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Performed By</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Updated entries with specific dates and logical flow -->
+            <tr>
+                <td>2024-11-25</td>
+                <td>Report Submitted</td>
+                <td>Resident</td>
+            </tr>
+            <tr>
+                <td>2024-11-26</td>
+                <td>Report Reviewed</td>
+                <td>Admin</td>
+            </tr>
+            <tr>
+                <td>2024-11-27</td>
+                <td>Assigned to Investigator</td>
+                <td>Moderator</td>
+            </tr>
+            <tr>
+                <td>2024-11-29</td>
+                <td>Investigation Completed</td>
+                <td>Investigator</td>
+            </tr>
+            <tr>
+                <td>2024-11-30</td>
+                <td>Resolution Provided</td>
+                <td>Admin</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
         <!-- Logout button -->
         <div>
             <p>To log out, click the button below:</p>
-            <a href="/logout" class="button logout-btn">Logout</a>
+            <a href="{{ url_for('logout') }}" class="button logout-btn">Logout</a>
         </div>
     </div>
 
