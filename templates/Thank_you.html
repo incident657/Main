@@ -76,23 +76,7 @@
         .feedback-section button:hover {
             background-color: #218838;
         }
-        .audit-trail-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .audit-trail-table th, .audit-trail-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        .audit-trail-table th {
-            background-color: #f8f9fa;
-            color: #333;
-            font-weight: bold;
-        }
-        .audit-trail-table td {
-            text-align: center;
-        }
+        
     </style>
 </head>
 <body>
@@ -115,60 +99,7 @@
                 <button type="submit">Submit Feedback</button>
             </form>
         </div>
-
-        <!-- Audit Trail Section -->
-        <div class="audit-trail-section">
-            <h2>Audit Trail</h2>
-            <p>Below is a record of actions taken regarding your submitted report for accountability:</p>
-            <table class="audit-trail-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Action</th>
-                        <th>Performed By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dynamically generated audit trail entries -->
-                    {% if report_info %}
-                        <tr>
-                            <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
-                            <td>Report Submitted</td>
-                            <td>Resident</td>
-                        </tr>
-                        {% if report_info.status == 'pending' %}
-                            <tr>
-                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
-                                <td>Report Reviewed</td>
-                                <td>Admin</td>
-                            </tr>
-                        {% endif %}
-                        {% if report_info.status == 'resolved' %}
-                            <tr>
-                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
-                                <td>Assigned to Investigator</td>
-                                <td>Moderator</td>
-                            </tr>
-                            <tr>
-                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
-                                <td>Investigation Completed</td>
-                                <td>Investigator</td>
-                            </tr>
-                            <tr>
-                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
-                                <td>Resolution Provided</td>
-                                <td>Admin</td>
-                            </tr>
-                        {% endif %}
-                    {% else %}
-                        <tr>
-                            <td colspan="3">No audit trail available.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-
+       
         <!-- Logout button -->
         <div>
             <p>To log out, click the button below:</p>
