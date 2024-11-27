@@ -19,6 +19,15 @@ app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255), nullable=False)
+    report_id = db.Column(db.Integer, nullable=True)  # Link to the report
+    is_read = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return f'<Notification {self.id}>'
+
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key column
     username = db.Column(db.String(50), nullable=True)  # Nullable for anonymous feedback
@@ -140,6 +149,11 @@ def submit_report():
     db.session.add(new_report)
     db.session.commit()
 
+    notification_message = f"New incident reported: {report_title}"
+    notification = Notification(message=notification_message, report_id=new_report.id)
+    db.session.add(notification)
+    db.session.commit()
+
      # Flash a success message and redirect to the Thank You page
     flash("Report submitted successfully!", "success")
     return redirect(url_for('thank_you'))  # Corrected return statement and route name
@@ -167,6 +181,25 @@ def admin_feedbacks():
         return redirect('/')
     feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
     return render_template('admin_feedbacks.html', feedbacks=feedbacks)
+
+@app.route('/notifications')
+def get_notifications():
+    notifications = Notification.query.filter_by(is_read=False).all()
+    return jsonify([{
+        "id": n.id,
+        "message": n.message,
+        "report_id": n.report_id
+    } for n in notifications])
+
+# Mark a notification as read
+@app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
+def mark_notification_as_read(notification_id):
+    notification = Notification.query.get(notification_id)
+    if notification:
+        notification.is_read = True
+        db.session.commit()
+        return jsonify({"success": True})
+    return jsonify({"success": False}), 404
     
 @app.route('/admin_reports')
 def admin_reports():
