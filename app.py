@@ -20,9 +20,14 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # Primary key column
     username = db.Column(db.String(50), nullable=True)  # Nullable for anonymous feedback
     feedback = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Feedback {self.id}>'
+
     
 # Database model for reports
 class Report(db.Model):
