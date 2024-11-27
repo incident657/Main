@@ -111,53 +111,63 @@
             <h2>Feedback</h2>
             <p>We value your input. If you'd like to provide feedback on how your incident was handled, please share your thoughts below:</p>
             <form action="/submit_feedback" method="POST">
-                <textarea name="feedback" placeholder="Write your feedback here..."></textarea>
+                <textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
                 <button type="submit">Submit Feedback</button>
             </form>
         </div>
 
         <!-- Audit Trail Section -->
         <div class="audit-trail-section">
-    <h2>Audit Trail</h2>
-    <p>Below is a record of actions taken regarding your submitted report for accountability:</p>
-    <table class="audit-trail-table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Action</th>
-                <th>Performed By</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Updated entries with specific dates and logical flow -->
-            <tr>
-                <td>2024-11-25</td>
-                <td>Report Submitted</td>
-                <td>Resident</td>
-            </tr>
-            <tr>
-                <td>2024-11-26</td>
-                <td>Report Reviewed</td>
-                <td>Admin</td>
-            </tr>
-            <tr>
-                <td>2024-11-27</td>
-                <td>Assigned to Investigator</td>
-                <td>Moderator</td>
-            </tr>
-            <tr>
-                <td>2024-11-29</td>
-                <td>Investigation Completed</td>
-                <td>Investigator</td>
-            </tr>
-            <tr>
-                <td>2024-11-30</td>
-                <td>Resolution Provided</td>
-                <td>Admin</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            <h2>Audit Trail</h2>
+            <p>Below is a record of actions taken regarding your submitted report for accountability:</p>
+            <table class="audit-trail-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Action</th>
+                        <th>Performed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamically generated audit trail entries -->
+                    {% if report_info %}
+                        <tr>
+                            <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
+                            <td>Report Submitted</td>
+                            <td>Resident</td>
+                        </tr>
+                        {% if report_info.status == 'pending' %}
+                            <tr>
+                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
+                                <td>Report Reviewed</td>
+                                <td>Admin</td>
+                            </tr>
+                        {% endif %}
+                        {% if report_info.status == 'resolved' %}
+                            <tr>
+                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
+                                <td>Assigned to Investigator</td>
+                                <td>Moderator</td>
+                            </tr>
+                            <tr>
+                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
+                                <td>Investigation Completed</td>
+                                <td>Investigator</td>
+                            </tr>
+                            <tr>
+                                <td>{{ report_info.timestamp.strftime('%Y-%m-%d') }}</td>
+                                <td>Resolution Provided</td>
+                                <td>Admin</td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No audit trail available.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
 
         <!-- Logout button -->
         <div>
@@ -165,6 +175,7 @@
             <a href="{{ url_for('logout') }}" class="button logout-btn">Logout</a>
         </div>
     </div>
-
+    
+    <script src="scripts.js"></script>
 </body>
 </html>
