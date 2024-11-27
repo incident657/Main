@@ -192,7 +192,47 @@
             th, td {
                 padding: 8px 10px;
             }
+
+            .notification-bell {
+            position: relative;
+            cursor: pointer;
         }
+        .notification-bell .count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .notifications-dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .notifications-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notifications-dropdown ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .notifications-dropdown ul li:hover {
+            background-color: #f5f5f5;
+        }
+        
     </style>
 </head>
 <body>
@@ -211,6 +251,15 @@
         <div id="warning">
             ⚠️ Critical Incident! Immediate Action Required!
         </div>
+
+        <div class="notification-bell" onclick="toggleNotifications()">
+        <img src="/static/bellicon(1).png" alt="Notifications">
+        <span class="count" id="notification-count"></span>
+        <div class="notifications-dropdown" id="notifications-dropdown">
+            <ul id="notification-list"></ul>
+        </div>
+        </div>
+
 
         <!-- Reports Table -->
         <table>
@@ -319,6 +368,41 @@
     </div>
 
     <script>
+
+        // Fetch notifications
+        function fetchNotifications() {
+            fetch('/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationCount = document.getElementById('notification-count');
+                    const notificationList = document.getElementById('notification-list');
+                    notificationCount.textContent = data.length;
+                    notificationList.innerHTML = data.map(n => `
+                        <li onclick="markAsRead(${n.id})">${n.message}</li>
+                    `).join('');
+                });
+        }
+
+        // Mark notification as read
+        function markAsRead(notificationId) {
+            fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        fetchNotifications(); // Refresh notifications
+                    }
+                });
+        }
+
+        // Toggle notifications dropdown
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notifications-dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Initial fetch
+        fetchNotifications();
+        setInterval(fetchNotifications, 60000); // Refresh every 60 seconds
+        
         function applyFilters() {
             // Get the filter values
             const date = document.getElementById('filter-date').value;
