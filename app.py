@@ -175,10 +175,6 @@ def submit_feedback():
         flash("Thank you for your feedback!", "success")
     return redirect(url_for('thank_you'))
 
-@app.route('/')
-def admin_reports():
-    return render_template('admin_reports.html')
-
 @app.route('/admin_feedbacks')
 def admin_feedbacks():
     if session.get('role') != 'admin':
