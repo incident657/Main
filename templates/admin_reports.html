@@ -380,6 +380,19 @@ tr:hover {
         <button type="submit">Apply Filters</button>
     </form>
 </div>
+    
+    <tbody>
+    {% for report in reports %}
+    <tr id="report-{{ report.id }}" class="{% if report.id == highlight_report_id %}highlight{% endif %}">
+        <td>{{ report.title }}</td>
+        <td>{{ report.category }}</td>
+        <td>{{ report.status }}</td>
+        <td>{{ report.date }}</td>
+        <td>{{ report.description }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
 
     <tr id="report-{{ report.id }}" 
     class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} 
