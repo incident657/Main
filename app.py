@@ -293,8 +293,8 @@ def search_reports():
     ).all() if search_query else Report.query.all()
     return render_template('admin_reports.html', reports=reports)
 
-@app.route('/getFilteredReports')
-def get_filtered_reports():
+@app.route('/filter')
+def filter_reports():
     # Retrieve the filter values from the query parameters
     date_filter = request.args.get('date')
     category_filter = request.args.get('category')
@@ -320,16 +320,9 @@ def get_filtered_reports():
     # Execute the query and get the filtered reports
     reports = query.all()
 
-    # Return the filtered reports as JSON
-    reports_data = [{
-        'title': report.title,
-        'category': report.incident_type,  # Adjust this based on the actual category field
-        'status': report.status,
-        'date': report.timestamp.strftime('%Y-%m-%d'),
-        'description': report.description
-    } for report in reports]
+    # Pass the filtered reports to the filter.html template
+    return render_template('filter.html', reports=reports)
 
-    return jsonify(reports_data)
 
 @app.route('/mark_as_done/<int:id>', methods=['POST'])
 def mark_as_done(id):
