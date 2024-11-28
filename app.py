@@ -6,7 +6,6 @@ import folium
 from geopy.geocoders import Nominatim
 import os
 from flask import Flask, jsonify
-from flask.signals import first_request_started
 
 app = Flask(__name__)
 
@@ -217,12 +216,11 @@ def add_report():
     return redirect(url_for('admin_reports'))
 
 # Database setup
-# Database setup on the first request
-def setup_db(sender, **extra):
-    with sender.app_context():
+@app.before_request
+def setup_db():
+    with app.app_context():
         db.create_all()
 
-first_request_started.connect(setup_db, app)
     
 @app.route('/admin_reports')
 def admin_reports():
