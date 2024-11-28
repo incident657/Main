@@ -5,60 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
     <style>
+        /* General styling */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
 
-        .notifications-container {
-            max-width: 600px;
-            margin: 50px auto;
+        h1 {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 0;
+            margin: 0;
+        }
+
+        /* Notifications list styling */
+        ul {
+            list-style-type: none;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .notification-item {
-            padding: 15px;
+        li {
+            padding: 10px 15px;
             border-bottom: 1px solid #ddd;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .notification-item:hover {
-            background: #f9f9f9;
+        li:hover {
+            background-color: #f1f1f1;
         }
 
-        .notification-item:last-child {
+        li:last-child {
             border-bottom: none;
         }
     </style>
-    <script>
-        function fetchNotifications() {
-            fetch('/notifications')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('notifications-container');
-                    container.innerHTML = data.map(n => `
-                        <div class="notification-item" onclick="markAsRead(${n.id}, ${n.report_id})">
-                            ${n.message}
-                        </div>
-                    `).join('');
-                });
-        }
+</head>
+<body>
+    <h1>Notifications</h1>
+    <ul id="notifications-page-list"></ul>
 
+    <script>
+        // Fetch notifications for the page
+        fetch('/notifications')
+            .then(response => response.json())
+            .then(data => {
+                const notificationsPageList = document.getElementById('notifications-page-list');
+
+                // Display notifications
+                notificationsPageList.innerHTML = data.map(n => `
+                    <li onclick="markAsRead(${n.id}, ${n.report_id})">
+                        ${n.message}
+                    </li>
+                `).join('');
+            });
+
+        // Mark notification as read and redirect
         function markAsRead(notificationId, reportId) {
             fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = `/reports/${reportId}`;
+                        window.location.href = `/admin_reports?highlight=${reportId}`;
                     }
                 });
         }
-
-        fetchNotifications();
     </script>
-</head>
-<body>
-    <div class="notifications-container" id="notifications-container"></div>
 </body>
 </html>
