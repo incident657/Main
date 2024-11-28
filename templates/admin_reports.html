@@ -115,22 +115,54 @@ thead th {
 }
 
 /* Make sure the filters stay fixed in the top left corner */
+/* The filter section will be positioned at the bottom left */
 .filters-container {
-    position: fixed;
-    top: 80px; /* Adjust to avoid overlapping the navbar */
-    left: 20px;
-    width: 300px; /* Width for the filter box */
-    background-color: white;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    z-index: 100;
+    position: fixed; /* Fix it to the screen */
+    bottom: 20px; /* Adjust distance from the bottom */
+    left: 20px; /* Adjust distance from the left */
+    background-color: #fff; /* White background */
+    padding: 10px; /* Add padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    z-index: 1000; /* Ensure it stays on top of other elements */
+    width: 250px; /* Set a fixed width for the filter container */
 }
 
-/* Customize the critical class for important items */
-.critical {
-    background-color: #ffcccc;
-    color: red;
+/* Styling for the labels inside the filter container */
+.filters-container label {
+    display: block; /* Labels on separate lines */
+    margin-bottom: 5px; /* Space below each label */
+    font-size: 14px; /* Smaller font size */
+    color: #333; /* Dark text for readability */
+}
+
+/* Styling for input and select fields */
+.filters-container input,
+.filters-container select {
+    display: block; /* Inputs and selects should be on separate lines */
+    width: 100%; /* Full width inside the filter container */
+    margin-bottom: 10px; /* Space below each input/select */
+    padding: 5px; /* Padding inside input/select */
+    font-size: 14px; /* Consistent font size */
+    border: 1px solid #ccc; /* Light border around input/select */
+    border-radius: 3px; /* Rounded corners */
+}
+
+/* Apply button style */
+.filters-container button {
+    display: block; /* Button as a block element */
+    width: 100%; /* Full width inside the filter container */
+    padding: 8px; /* Button padding */
+    background-color: #007bff; /* Primary blue color */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 3px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Button hover effect */
+.filters-container button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
         .action-buttons {
