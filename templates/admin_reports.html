@@ -293,10 +293,18 @@ tr:hover {
             </thead>
             <tbody>
                 {% for report in reports %}
-                    <tr id="report-{{ report.id }}" class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %}">
-                        <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
-                        <td>{{ report.title }}</td>
-                        <td>
+    <tr id="report-{{ report.id }}" class="{% if report.id == highlight_report_id %}highlight{% endif %}">
+        <td>{{ report.title }}</td>
+        <td>{{ report.category }}</td>
+        <td>{{ report.status }}</td>
+        <td>{{ report.date }}</td>
+        <td>{{ report.description }}</td>
+    </tr>
+
+    <tr id="report-{{ report.id }}" class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} {% if report.id == selected_report_id %}highlight{% endif %}">
+        <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
+        <td>{{ report.title }}</td>
+        <td>
                             {{ report.custom_incident_type if report.incident_type == 'other' else report.incident_type }}
                         </td>
                         <td>{{ report.severity_type }}</td>
@@ -381,18 +389,6 @@ tr:hover {
     </form>
 </div>
     
-    <tbody>
-    {% for report in reports %}
-    <tr id="report-{{ report.id }}" class="{% if report.id == highlight_report_id %}highlight{% endif %}">
-        <td>{{ report.title }}</td>
-        <td>{{ report.category }}</td>
-        <td>{{ report.status }}</td>
-        <td>{{ report.date }}</td>
-        <td>{{ report.description }}</td>
-    </tr>
-    {% endfor %}
-</tbody>
-
 
     <tr id="report-{{ report.id }}" 
     class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} 
