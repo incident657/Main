@@ -3,30 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <title>Notifications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .notifications-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f9f9f9;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+    <script>
+        function fetchNotifications() {
+            fetch('/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('notifications-container');
+                    container.innerHTML = data.map(n => `
+                        <div class="notification-item" onclick="markAsRead(${n.id}, ${n.report_id})">
+                            ${n.message}
+                        </div>
+                    `).join('');
+                });
+        }
+
+        function markAsRead(notificationId, reportId) {
+            fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = `/reports/${reportId}`;
+                    }
+                });
+        }
+
+        fetchNotifications();
+    </script>
 </head>
 <body>
-    <h1>Notification Details</h1>
-    <div id="notification-message">
-        <!-- Message will be populated here -->
-    </div>
-    <button onclick="goToAdminPanel()">Go to Admin Panel</button>
-
-    <script>
-        // Extract report_id from URL
-        const params = new URLSearchParams(window.location.search);
-        const reportId = params.get('report_id');
-        
-        // Display notification message
-        if (reportId) {
-            document.getElementById('notification-message').textContent = `Viewing details for report ID: ${reportId}`;
-        }
-
-        // Redirect back to admin panel
-        function goToAdminPanel() {
-            window.location.href = `/reports/${reportId}`;
-        }
-    </script>
+    <div class="notifications-container" id="notifications-container"></div>
 </body>
 </html>
