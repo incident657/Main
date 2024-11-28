@@ -146,21 +146,22 @@
             </div>
 
             <!-- Location -->
-            <div class="form-group">
-                <label for="location_choice">How would you like to provide your location?</label>
-                <select id="location_choice" name="location_choice" onchange="toggleLocationFields()" required>
-                    <option value="manual">Manually Enter Location</option>
-                    <option value="auto">Allow Us to Detect Your Location</option>
-                </select>
-            </div>
+           <div class="form-group">
+    <label for="location_choice">How would you like to provide your location?</label>
+    <select id="location_choice" name="location_choice" onchange="toggleLocationFields()" required>
+        <option value="manual">Manually Enter Location</option>
+        <option value="auto">Allow Us to Detect Your Location</option>
+    </select>
+</div>
 
-            <!-- Manual Location Input -->
-            <div class="form-group" id="manual_location" style="display:none;">
-                <label for="report_location">Write the location</label>
-                <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
-            </div>
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
+<!-- Manual Location Input -->
+<div class="form-group" id="manual_location" style="display:none;">
+    <label for="report_location">Write the location</label>
+    <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
+</div>
+
+<input type="hidden" id="latitude" name="latitude">
+<input type="hidden" id="longitude" name="longitude">
 
             <!-- Date and Time -->
             <div class="form-group">
@@ -206,27 +207,27 @@
         }
         // Toggle visibility of the "Other Incident" description field
         function toggleLocationFields() {
-            var locationChoice = document.getElementById('location_choice').value;
-            var manualLocation = document.getElementById('manual_location');
-        
-            if (locationChoice === 'manual') {
-                manualLocation.style.display = 'block';
-                document.getElementById('latitude').value = '';
-                document.getElementById('longitude').value = '';
-            } else {
-                manualLocation.style.display = 'none';
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        document.getElementById('latitude').value = position.coords.latitude;
-                        document.getElementById('longitude').value = position.coords.longitude;
-                    }, function () {
-                        alert('Unable to retrieve your location.');
-                    });
-                } else {
-                    alert('Geolocation is not supported by your browser.');
-                }
-            }
+    var locationChoice = document.getElementById('location_choice').value;
+    var manualLocation = document.getElementById('manual_location');
+
+    if (locationChoice === 'manual') {
+        manualLocation.style.display = 'block';
+        document.getElementById('latitude').value = '';
+        document.getElementById('longitude').value = '';
+    } else {
+        manualLocation.style.display = 'none';
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            }, function () {
+                alert('Unable to retrieve your location.');
+            });
+        } else {
+            alert('Geolocation is not supported by your browser.');
         }
+    }
+}
         
     </script>
 </body>
