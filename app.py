@@ -175,6 +175,10 @@ def submit_feedback():
         flash("Thank you for your feedback!", "success")
     return redirect(url_for('thank_you'))
 
+@app.route('/')
+def admin_reports():
+    return render_template('admin_reports.html')
+
 @app.route('/admin_feedbacks')
 def admin_feedbacks():
     if session.get('role') != 'admin':
@@ -191,7 +195,7 @@ def get_notifications():
         "report_id": n.report_id
     } for n in notifications])
 
-# Route to mark a notification as read
+# Mark a notification as read
 @app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
 def mark_notification_as_read(notification_id):
     notification = Notification.query.get(notification_id)
@@ -201,21 +205,20 @@ def mark_notification_as_read(notification_id):
         return jsonify({"success": True})
     return jsonify({"success": False}), 404
 
-# Route for admin reports page
-@app.route('/admin_reports')
-def admin_reports():
-    return render_template('admin_reports.html')
-
-# Example of adding a notification when a new report is created
-@app.route('/create_report', methods=['POST'])
-def create_report():
-    report_title = request.form.get('title')
-    new_report = {"id": 1, "title": report_title}  # Dummy report data
+# Add a new report (for testing purposes)
+@app.route('/add_report', methods=['POST'])
+def add_report():
+    report_title = request.form.get('report_title')
     notification_message = f"New incident reported: {report_title}"
-    notification = Notification(message=notification_message, report_id=new_report["id"])
-    db.session.add(notification)
+    new_notification = Notification(message=notification_message, report_id=123)  # Replace 123 with actual report ID
+    db.session.add(new_notification)
     db.session.commit()
-    return jsonify({"success": True})
+    return redirect(url_for('admin_reports'))
+
+# Database setup
+@app.before_first_request
+def setup_db():
+    db.create_all()
 
     
 @app.route('/admin_reports')
