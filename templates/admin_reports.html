@@ -113,8 +113,6 @@ thead th {
     background-color: #f4f4f4; /* Keep headers visible on scroll */
     z-index: 5; /* Ensure the headers stay above the table content */
 }
-
-//* Sticky filter bar at the bottom-left */
 .filters-bar {
     position: fixed;
     bottom: 20px;
@@ -125,26 +123,28 @@ thead th {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: flex;
-    justify-content: flex-start;
     gap: 10px;
     align-items: center;
 }
 
-.filters-bar label,
-.filters-bar select,
-.filters-bar input {
+.filters-bar label {
     font-size: 14px;
+}
+
+.filters-bar input,
+.filters-bar select {
     padding: 5px;
+    font-size: 14px;
     border-radius: 3px;
     border: 1px solid #ccc;
 }
 
 .filters-bar input[type="date"] {
-    width: 150px;
+    width: 140px;
 }
 
 .filters-bar select {
-    width: 150px;
+    width: 160px;
 }
 
 .filters-bar button {
@@ -159,7 +159,6 @@ thead th {
 .filters-bar button:hover {
     background-color: #0056b3;
 }
-
         .action-buttons {
             text-align: center;
         }
