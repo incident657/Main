@@ -28,15 +28,6 @@ class Notification(db.Model):
     def __repr__(self):
         return f'<Notification {self.id}>'
 
-class Notification(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.String(255), nullable=False)
-    report_id = db.Column(db.Integer, nullable=True)  # Link to the report
-    is_read = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return f'<Notification {self.id}>'
-
     
 # Database model for reports
 class Report(db.Model):
