@@ -217,6 +217,11 @@ def setup_db():
     with app.app_context():
         db.create_all()
 
+@app.route('/notification.html')
+def notification_page():
+    # Render the notification.html page (assuming it's in your templates folder)
+    return render_template('notification.html')
+
     
 @app.route('/admin_reports')
 def admin_reports():
