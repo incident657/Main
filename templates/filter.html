@@ -5,13 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filtered Reports</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
         .filters-container {
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: #f9f9f9;
-            padding: 10px;
+            bottom: 20px;
+            right: 20px;
+            background: #fff;
+            padding: 15px;
             border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .filters-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .filters-container select, .filters-container input, .filters-container button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .filters-container button {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .filters-container button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -29,7 +94,7 @@
         </thead>
         <tbody>
             {% for report in reports %}
-            <tr>
+            <tr onclick="redirectToAdminPanel({{ report.id }})">
                 <td>{{ report.title }}</td>
                 <td>{{ report.category }}</td>
                 <td>{{ report.status }}</td>
@@ -39,5 +104,49 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="filters-container">
+        <label for="filter-date">Filter by Date:</label>
+        <input type="date" id="filter-date" name="filter-date">
+
+        <label for="filter-category">Filter by Category:</label>
+        <select id="filter-category" name="filter-category">
+            <option value="">All Categories</option>
+            <option value="Health and Safety">Health and Safety</option>
+            <option value="Criminal Incidents">Criminal Incidents</option>
+            <option value="Environmental Incidents">Environmental Incidents</option>
+            <option value="Public Disturbances">Public Disturbances</option>
+            <option value="Infrastructure Issues">Infrastructure Issues</option>
+        </select>
+
+        <label for="filter-status">Filter by Status:</label>
+        <select id="filter-status" name="filter-status">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Resolved">Resolved</option>
+        </select>
+
+        <button onclick="applyFilters()">Apply Filters</button>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const date = document.getElementById('filter-date').value;
+            const category = document.getElementById('filter-category').value;
+            const status = document.getElementById('filter-status').value;
+
+            let queryParams = '?';
+            if (date) queryParams += `date=${date}&`;
+            if (category) queryParams += `category=${category}&`;
+            if (status) queryParams += `status=${status}&`;
+            queryParams = queryParams.slice(0, -1);
+
+            window.location.href = `/filter.html${queryParams}`;
+        }
+
+        function redirectToAdminPanel(reportId) {
+            window.location.href = `/admin_reports?id=${reportId}`;
+        }
+    </script>
 </body>
 </html>
