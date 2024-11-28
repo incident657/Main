@@ -292,7 +292,7 @@ tr:hover {
                 </tr>
             </thead>
             <tbody>
-                {% for report in reports %}
+               {% for report in reports %}
     <tr id="report-{{ report.id }}" class="{% if report.id == highlight_report_id %}highlight{% endif %}">
         <td>{{ report.title }}</td>
         <td>{{ report.category }}</td>
@@ -305,17 +305,17 @@ tr:hover {
         <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
         <td>{{ report.title }}</td>
         <td>
-                            {{ report.custom_incident_type if report.incident_type == 'other' else report.incident_type }}
-                        </td>
-                        <td>{{ report.severity_type }}</td>
-                        <td>{{ report.urgency_type }}</td>
-                        <td>{{ report.location }}</td>
-                        <td>{{ report.date }}</td>
-                        <td>{{ report.time }}</td>
-                        <td>{{ report.description }}</td>
-                        <td>{{ "Yes" if report.anonymous else "No" }}</td>
-                        <td>{{ report.status }}</td>
-                        <td>
+            {{ report.custom_incident_type if report.incident_type == 'other' else report.incident_type }}
+        </td>
+        <td>{{ report.severity_type }}</td>
+        <td>{{ report.urgency_type }}</td>
+        <td>{{ report.location }}</td>
+        <td>{{ report.date }}</td>
+        <td>{{ report.time }}</td>
+        <td>{{ report.description }}</td>
+        <td>{{ "Yes" if report.anonymous else "No" }}</td>
+        <td>{{ report.status }}</td>
+        <td>
                             {% if report.status != 'Resolved' %}
                             <form action="{{ url_for('mark_as_done', id=report.id) }}" method="POST">
                                 <button type="submit">Mark as Done</button>
