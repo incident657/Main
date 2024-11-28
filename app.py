@@ -42,7 +42,7 @@ class Feedback(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    location = db.Column(db.String(100))
+    location = db.Column(db.String(200))
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
@@ -62,16 +62,18 @@ with app.app_context():
     db.create_all()
 
 # Geocoding function
-def geocode_location(location_name):
-    geolocator = Nominatim(user_agent="incident_reporting")
+geolocator = Nominatim(user_agent="incident_reporting")
+
+def geocode_location(latitude, longitude):
+    """Converts latitude and longitude into a human-readable address."""
     try:
-        location = geolocator.geocode(location_name)
+        location = geolocator.reverse((latitude, longitude), language='en', timeout=10)
         if location:
-            return location.latitude, location.longitude
-        return None, None
+            return location.address  # Return the address
+        return "Unknown location"
     except Exception as e:
         print(f"Error during geocoding: {e}")
-        return None, None
+        return "Unknown location"
 
 # Routes
 @app.route('/')
@@ -127,15 +129,21 @@ def submit_report():
     except ValueError:
         timestamp = None
 
-    if not latitude or not longitude:
-        latitude, longitude = geocode_location(report_location)
-    if latitude is None or longitude is None:
-        latitude = 14.5995  # Default to Manila
-        longitude = 120.9842
+    report_location = request.form.get('report_location')
+    latitude = request.form.get('latitude')
+    longitude = request.form.get('longitude')
+
+    if latitude and longitude:  # Auto location detection
+        latitude = float(latitude)
+        longitude = float(longitude)
+        # Get human-readable address
+        location = geocode_location(latitude, longitude)
+    else:  # Manual input
+        location = report_location
 
     new_report = Report(
         title=report_title,
-        location=report_location,
+        location=location,
         latitude=float(latitude) if latitude else None,
         longitude=float(longitude) if longitude else None,
         timestamp=timestamp,
@@ -345,9 +353,14 @@ def update_incident_type(id):
 
 @app.route('/locate/<int:report_id>')
 def locate_report(report_id):
-    # Your logic here
-    return f"Locate report with ID: {report_id}"
-
+    report = Report.query.get_or_404(report_id)
+    if report.latitude and report.longitude:
+        # Use Google Maps to show the report location
+        return redirect(f'https://www.google.com/maps?q={report.latitude},{report.longitude}')
+    else:
+        flash("No location data available for this report.", "error")
+        return redirect('/admin_reports')
+        
 @app.route('/health')
 def health_check():
     return 'OK', 200
