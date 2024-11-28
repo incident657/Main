@@ -197,28 +197,27 @@
         .notification-bell {
             position: relative;
             display: inline-block;
-            width: 18px; /* Smaller bell size */
-            height: 18px; /* Smaller bell size */
+            width: 30px;
+            height: 30px;
             cursor: pointer;
+            margin: 20px;
         }
 
         .notification-bell img {
-            width: 100%; /* Fill the bell container */
-            height: 100%; /* Maintain aspect ratio */
-            display: block;
+            width: 100%;
+            height: 100%;
         }
 
         .notification-bell .count {
             position: absolute;
-            top: -4px;
-            right: -4px;
+            top: 0;
+            right: 0;
             background-color: red;
             color: white;
             border-radius: 50%;
-            padding: 1px 4px; /* Smaller padding for smaller bell */
-            font-size: 10px; /* Smaller font size */
+            padding: 5px;
+            font-size: 12px;
             font-weight: bold;
-            min-width: 16px; /* Maintain consistency for single/double digits */
             text-align: center;
         }
 
@@ -232,33 +231,36 @@
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            width: 260px; /* Slightly smaller width */
-            max-height: 350px;
+            width: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
         .notifications-dropdown ul {
             list-style: none;
-            padding: 0;
             margin: 0;
+            padding: 0;
         }
 
         .notifications-dropdown ul li {
-            padding: 10px 15px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
-            cursor: pointer;
             font-size: 14px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .notifications-dropdown ul li.new-report {
+            background-color: #ffcccc;
         }
 
         .notifications-dropdown ul li:hover {
             background-color: #f7f7f7;
-            color: #333;
         }
 
         .notifications-dropdown ul li:last-child {
             border-bottom: none;
         }
-    }
         
     </style>
 </head>
@@ -279,13 +281,13 @@
             ⚠️ Critical Incident! Immediate Action Required!
         </div>
 
-        <div class="notification-bell" onclick="toggleNotifications()">
+         <div class="notification-bell" onclick="toggleNotifications()">
         <img src="/static/bellicon(1).png" alt="Notifications">
         <span class="count" id="notification-count"></span>
         <div class="notifications-dropdown" id="notifications-dropdown">
             <ul id="notification-list"></ul>
         </div>
-        </div>
+    </div>
 
 
         <!-- Reports Table -->
@@ -396,16 +398,15 @@
 
     <script>
 
-        // Fetch notifications
         function fetchNotifications() {
             fetch('/notifications')
                 .then(response => response.json())
                 .then(data => {
                     const notificationCount = document.getElementById('notification-count');
                     const notificationList = document.getElementById('notification-list');
-                    notificationCount.textContent = data.length;
+                    notificationCount.textContent = data.length > 0 ? data.length : '';
                     notificationList.innerHTML = data.map(n => `
-                        <li onclick="markAsRead(${n.id})">${n.message}</li>
+                        <li class="new-report" onclick="markAsRead(${n.id})">${n.message}</li>
                     `).join('');
                 });
         }
@@ -426,9 +427,11 @@
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Initial fetch
-        fetchNotifications();
-        setInterval(fetchNotifications, 60000); // Refresh every 60 seconds
+        // Fetch notifications on page load and every 60 seconds
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchNotifications();
+            setInterval(fetchNotifications, 60000); // Refresh every 60 seconds
+        });
         
         function applyFilters() {
             // Get the filter values
