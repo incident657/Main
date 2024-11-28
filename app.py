@@ -265,7 +265,7 @@ def admin_reports():
     except Exception as e:
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
-        return render_template('error.html')  # Render an error page for graceful handling
+        return render_template('error.html', error_message="Unable to load admin reports. Please try again later.")
 
 @app.route('/logout')
 def logout():
