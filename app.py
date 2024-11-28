@@ -229,19 +229,13 @@ def setup_db():
 def notification_page():
     return render_template('notification.html')
 
-
-    
-@app.route('/admin_reports')
+ @app.route('/admin_reports')
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
     try:
         reports = Report.query.all()
 
-        # Check if 'reports' are retrieved properly
-        if not reports:
-            flash("No reports found", "info")
-        
         # Add extra attributes for display
         for report in reports:
             if report.timestamp:
@@ -266,7 +260,7 @@ def admin_reports():
     except Exception as e:
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
-        return render_template('error.html', error_message="Unable to load admin reports. Please try again later.")
+        return render_template('error.html')  # Render an error page for graceful handling
 
 @app.route('/logout')
 def logout():
