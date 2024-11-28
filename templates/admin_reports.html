@@ -343,30 +343,30 @@ tr:hover {
     </div>
 
     <div class="filters-container">
-        <form action="/filter" method="GET">
+    <form action="/filter" method="GET">
         <label for="filter-date">Filter by Date:</label>
-        <input type="date" id="filter-date" name="filter-date">
+        <input type="date" id="filter-date" name="date">
       
         <label for="filter-category">Filter by Category:</label>
-        <select id="filter-category" name="filter-category">
+        <select id="filter-category" name="category">
             <option value="">All Categories</option>
             <option value="Health and Safety">Health and Safety</option>
             <option value="Criminal Incidents">Criminal Incidents</option>
             <option value="Environmental Incidents">Environmental Incidents</option>
             <option value="Public Disturbances">Public Disturbances</option>
             <option value="Infrastructure Issues">Infrastructure Issues</option>
-        
         </select>
       
         <label for="filter-status">Filter by Status:</label>
-        <select id="filter-status" name="filter-status">
+        <select id="filter-status" name="status">
             <option value="">All Statuses</option>
             <option value="pending">Pending</option>
             <option value="resolved">Resolved</option>
         </select>
       
-        <button id="apply-filters" onclick="applyFilters()">Apply Filters</button>
-    </div>
+        <button type="submit">Apply Filters</button>
+    </form>
+</div>
 
     <script>
 
