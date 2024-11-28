@@ -319,14 +319,14 @@
                         </td>
 
                         <td>
-                            <button onclick="locateResident(
-                                {% if report.latitude is not none %}{{ report.latitude }}{% else %}null{% endif %}, 
-                                {% if report.longitude is not none %}{{ report.longitude }}{% else %}null{% endif %}
-                            )">
-    
-                                <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary">Locate</a>
-                            </button>
-                        </td>
+    <button onclick="locateResident(
+        {% if report.latitude is not none %}{{ report.latitude }}{% else %}null{% endif %}, 
+        {% if report.longitude is not none %}{{ report.longitude }}{% else %}null{% endif %}
+    )">
+        <a href="{{ url_for('locate_report', report_id=report.id) }}" class="btn btn-primary">Locate</a>
+    </button>
+</td>
+
                         <td class="action-buttons">
                             <!-- Delete button for each report -->
                             <form action="/delete_report/{{ report.id }}" method="POST" style="display:inline;">
