@@ -229,7 +229,7 @@ def setup_db():
 def notification_page():
     return render_template('notification.html')
 
- @app.route('/admin_reports')
+@app.route('/admin_reports')
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
