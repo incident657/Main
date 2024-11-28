@@ -197,25 +197,23 @@
         .notification-bell {
             position: relative;
             display: inline-block;
-            width: 30px;
-            height: 30px;
             cursor: pointer;
             margin: 20px;
         }
 
         .notification-bell img {
-            width: 100%;
-            height: 100%;
+            width: 30px;
+            height: 30px;
         }
 
         .notification-bell .count {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -5px;
+            right: -5px;
             background-color: red;
             color: white;
             border-radius: 50%;
-            padding: 5px;
+            padding: 5px 8px;
             font-size: 12px;
             font-weight: bold;
             text-align: center;
@@ -232,36 +230,34 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             width: 300px;
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
         }
 
         .notifications-dropdown ul {
             list-style: none;
-            margin: 0;
             padding: 0;
+            margin: 0;
         }
 
         .notifications-dropdown ul li {
-            padding: 10px;
+            padding: 10px 15px;
             border-bottom: 1px solid #eee;
-            font-size: 14px;
             cursor: pointer;
-            background-color: #fff;
-        }
-
-        .notifications-dropdown ul li.new-report {
-            background-color: #ffcccc;
+            font-size: 14px;
         }
 
         .notifications-dropdown ul li:hover {
             background-color: #f7f7f7;
         }
 
+        .notifications-dropdown ul li.new-report {
+            background-color: #ffefcc;
+        }
+
         .notifications-dropdown ul li:last-child {
             border-bottom: none;
         }
-        
     </style>
 </head>
 <body>
@@ -281,13 +277,16 @@
             ⚠️ Critical Incident! Immediate Action Required!
         </div>
 
-         <div class="notification-bell" onclick="toggleNotifications()">
+          <div class="notification-bell" onclick="toggleNotifications()">
         <img src="/static/bellicon(1).png" alt="Notifications">
         <span class="count" id="notification-count"></span>
         <div class="notifications-dropdown" id="notifications-dropdown">
             <ul id="notification-list"></ul>
         </div>
     </div>
+
+    <!-- Sound for notifications -->
+    <audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
 
 
         <!-- Reports Table -->
@@ -398,25 +397,37 @@
 
     <script>
 
-        function fetchNotifications() {
+       function fetchNotifications() {
             fetch('/notifications')
                 .then(response => response.json())
                 .then(data => {
                     const notificationCount = document.getElementById('notification-count');
                     const notificationList = document.getElementById('notification-list');
-                    notificationCount.textContent = data.length > 0 ? data.length : '';
+
+                    // Update the count
+                    notificationCount.textContent = data.length;
+
+                    // Populate the dropdown
                     notificationList.innerHTML = data.map(n => `
-                        <li class="new-report" onclick="markAsRead(${n.id})">${n.message}</li>
+                        <li class="new-report" onclick="markAsRead(${n.id}, ${n.report_id})">
+                            ${n.message}
+                        </li>
                     `).join('');
+
+                    // Play sound if new notifications arrive
+                    if (data.length > 0) {
+                        document.getElementById('notification-sound').play();
+                    }
                 });
         }
 
         // Mark notification as read
-        function markAsRead(notificationId) {
+        function markAsRead(notificationId, reportId) {
             fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
-                        fetchNotifications(); // Refresh notifications
+                        // Redirect to the specific report
+                        window.location.href = `/reports/${reportId}`;
                     }
                 });
         }
@@ -427,11 +438,9 @@
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Fetch notifications on page load and every 60 seconds
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchNotifications();
-            setInterval(fetchNotifications, 60000); // Refresh every 60 seconds
-        });
+        // Initial fetch
+        fetchNotifications();
+        setInterval(fetchNotifications, 60000);
         
         function applyFilters() {
             // Get the filter values
