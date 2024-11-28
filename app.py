@@ -28,14 +28,14 @@ class Notification(db.Model):
     def __repr__(self):
         return f'<Notification {self.id}>'
 
-class Feedback(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # Primary key column
-    username = db.Column(db.String(50), nullable=True)  # Nullable for anonymous feedback
-    feedback = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255), nullable=False)
+    report_id = db.Column(db.Integer, nullable=True)  # Link to the report
+    is_read = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return f'<Feedback {self.id}>'
+        return f'<Notification {self.id}>'
 
     
 # Database model for reports
@@ -191,7 +191,7 @@ def get_notifications():
         "report_id": n.report_id
     } for n in notifications])
 
-# Mark a notification as read
+# Route to mark a notification as read
 @app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
 def mark_notification_as_read(notification_id):
     notification = Notification.query.get(notification_id)
@@ -200,6 +200,23 @@ def mark_notification_as_read(notification_id):
         db.session.commit()
         return jsonify({"success": True})
     return jsonify({"success": False}), 404
+
+# Route for admin reports page
+@app.route('/admin_reports')
+def admin_reports():
+    return render_template('admin_reports.html')
+
+# Example of adding a notification when a new report is created
+@app.route('/create_report', methods=['POST'])
+def create_report():
+    report_title = request.form.get('title')
+    new_report = {"id": 1, "title": report_title}  # Dummy report data
+    notification_message = f"New incident reported: {report_title}"
+    notification = Notification(message=notification_message, report_id=new_report["id"])
+    db.session.add(notification)
+    db.session.commit()
+    return jsonify({"success": True})
+
     
 @app.route('/admin_reports')
 def admin_reports():
