@@ -106,11 +106,32 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
+/* Make column titles sticky even when scrolling */
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4; /* Keep headers visible on scroll */
+    z-index: 5; /* Ensure the headers stay above the table content */
+}
 
-        .critical {
-            background-color: #ffcccc;
-            color: red;
-        }
+/* Make sure the filters stay fixed in the top left corner */
+.filters-container {
+    position: fixed;
+    top: 80px; /* Adjust to avoid overlapping the navbar */
+    left: 20px;
+    width: 300px; /* Width for the filter box */
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 100;
+}
+
+/* Customize the critical class for important items */
+.critical {
+    background-color: #ffcccc;
+    color: red;
+}
 
         .action-buttons {
             text-align: center;
@@ -141,48 +162,51 @@ tr:hover {
         }
 
    .filters-container {
-    position: fixed; /* Make it fixed on the screen */
-    bottom: 20px; /* Adjust distance from the bottom */
-    left: 20px; /* Adjust distance from the left */
-    background-color: #ffffff; /* White background for better visibility */
-    border: 1px solid #ccc; /* Light border for clarity */
-    padding: 10px; /* Add some padding for spacing */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    z-index: 1000; /* Ensure it appears above other elements */
+    position: fixed;
+    top: 20px; /* Adjust distance from the top */
+    left: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 300px; /* Adjust width of the filter panel */
+    max-height: 90vh; /* Make it scrollable if too long */
+    overflow-y: auto;
 }
 
 .filters-container label {
-    display: block; /* Labels on separate lines */
-    margin-bottom: 5px; /* Space below each label */
-    font-size: 14px; /* Slightly smaller font size */
-    color: #333; /* Dark text for readability */
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
 }
 
 .filters-container input,
 .filters-container select {
-    display: block; /* Input fields and selects on separate lines */
-    width: 100%; /* Full width within the container */
-    margin-bottom: 10px; /* Space below each input/select */
-    padding: 5px; /* Padding inside inputs/selects */
-    font-size: 14px; /* Match label font size */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 3px; /* Rounded corners */
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 .filters-container button {
-    display: block; /* Make the button a block element */
-    width: 100%; /* Full width within the container */
-    padding: 8px; /* Padding for the button */
-    background-color: #007bff; /* Primary blue color */
-    color: #ffffff; /* White text */
-    border: none; /* Remove border */
-    border-radius: 3px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .filters-container button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
 }
 
 
