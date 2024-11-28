@@ -160,8 +160,10 @@
     <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
 </div>
 
+<!-- Hidden Fields for Latitude and Longitude -->
 <input type="hidden" id="latitude" name="latitude">
 <input type="hidden" id="longitude" name="longitude">
+
 
             <!-- Date and Time -->
             <div class="form-group">
@@ -206,7 +208,7 @@
             }
         }
         // Toggle visibility of the "Other Incident" description field
-        function toggleLocationFields() {
+       function toggleLocationFields() {
     var locationChoice = document.getElementById('location_choice').value;
     var manualLocation = document.getElementById('manual_location');
 
@@ -228,6 +230,7 @@
         }
     }
 }
+
         
     </script>
 </body>
