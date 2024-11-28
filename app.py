@@ -6,6 +6,7 @@ import folium
 from geopy.geocoders import Nominatim
 import os
 from flask import Flask, jsonify
+from flask.signals import first_request_started
 
 app = Flask(__name__)
 
@@ -27,6 +28,15 @@ class Notification(db.Model):
 
     def __repr__(self):
         return f'<Notification {self.id}>'
+
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # Primary key column
+    username = db.Column(db.String(50), nullable=True)  # Nullable for anonymous feedback
+    feedback = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Feedback {self.id}>'
 
     
 # Database model for reports
@@ -207,10 +217,12 @@ def add_report():
     return redirect(url_for('admin_reports'))
 
 # Database setup
-@app.before_first_request
-def setup_db():
-    db.create_all()
+# Database setup on the first request
+def setup_db(sender, **extra):
+    with sender.app_context():
+        db.create_all()
 
+first_request_started.connect(setup_db, app)
     
 @app.route('/admin_reports')
 def admin_reports():
