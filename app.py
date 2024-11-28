@@ -229,26 +229,33 @@ def admin_reports():
         return redirect('/')
     try:
         reports = Report.query.all()
+
         # Add extra attributes for display
         for report in reports:
             if report.timestamp:
                 report.date = report.timestamp.strftime('%Y-%m-%d')
                 report.time = report.timestamp.strftime('%H:%M')
+
+        # Determine if any critical and immediate report exists
         warning_sign = any(
-            report.severity_type == 'critical' and report.urgency_type == 'immediate'
+            report.severity_type.lower() == 'critical' and report.urgency_type.lower() == 'immediate'
             for report in reports
         )
-        return render_template('admin_reports.html', reports=reports, warning_sign=warning_sign)
+
+        # Get report ID to highlight from query parameters
+        highlight_report_id = request.args.get('highlight')
+
+        return render_template(
+            'admin_reports.html',
+            reports=reports,
+            warning_sign=warning_sign,
+            highlight_report_id=highlight_report_id
+        )
     except Exception as e:
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
         return render_template('error.html')  # Render an error page for graceful handling
 
-@app.route('/admin_reports')
-def admin_reports():
-    highlight_report_id = request.args.get('highlight')
-    # Pass this to the template for CSS highlighting logic
-    return render_template('admin_reports.html', highlight_report_id=highlight_report_id)
 
 
 @app.route('/logout')
