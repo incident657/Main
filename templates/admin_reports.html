@@ -195,69 +195,58 @@
 
             /* Notification Bell */
         .notification-bell {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            margin: 20px;
-        }
+    position: relative;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
 
-        .notification-bell img {
-            width: 30px;
-            height: 30px;
-        }
+.notification-bell .fa-bell {
+    color: #666;
+}
 
-        .notification-bell .count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 5px 8px;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
+.notification-bell .count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
 
-        .notifications-dropdown {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            width: 300px;
-            max-height: 350px;
-            overflow-y: auto;
-        }
+/* Dropdown for notifications */
+.notifications-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
 
-        .notifications-dropdown ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+.notifications-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
-        .notifications-dropdown ul li {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            font-size: 14px;
-        }
+.notifications-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
 
-        .notifications-dropdown ul li:hover {
-            background-color: #f7f7f7;
-        }
-
-        .notifications-dropdown ul li.new-report {
-            background-color: #ffefcc;
-        }
-
-        .notifications-dropdown ul li:last-child {
-            border-bottom: none;
-        }
+.notifications-dropdown li:hover {
+    background-color: #f9f9f9;
+}
     </style>
 </head>
 <body>
@@ -278,15 +267,16 @@
         </div>
 
           <div class="notification-bell" onclick="toggleNotifications()">
-        <img src="/static/bellicon(1).png" alt="Notifications">
-        <span class="count" id="notification-count"></span>
-        <div class="notifications-dropdown" id="notifications-dropdown">
-            <ul id="notification-list"></ul>
-        </div>
+    <i class="fa fa-bell"></i> <!-- Font Awesome icon -->
+    <span class="count" id="notification-count"></span>
+    <div class="notifications-dropdown" id="notifications-dropdown">
+        <ul id="notification-list"></ul>
     </div>
+</div>
 
-    <!-- Sound for notifications -->
-    <audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
+<!-- Sound for notifications -->
+<audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
+
 
 
         <!-- Reports Table -->
@@ -398,49 +388,50 @@
     <script>
 
        function fetchNotifications() {
-            fetch('/notifications')
-                .then(response => response.json())
-                .then(data => {
-                    const notificationCount = document.getElementById('notification-count');
-                    const notificationList = document.getElementById('notification-list');
+    fetch('/notifications')
+        .then(response => response.json())
+        .then(data => {
+            const notificationCount = document.getElementById('notification-count');
+            const notificationList = document.getElementById('notification-list');
 
-                    // Update the count
-                    notificationCount.textContent = data.length;
+            // Update the count
+            notificationCount.textContent = data.length;
 
-                    // Populate the dropdown
-                    notificationList.innerHTML = data.map(n => `
-                        <li class="new-report" onclick="markAsRead(${n.id}, ${n.report_id})">
-                            ${n.message}
-                        </li>
-                    `).join('');
+            // Populate the dropdown
+            notificationList.innerHTML = data.map(n => `
+                <li class="new-report" onclick="viewNotification(${n.id}, ${n.report_id})">
+                    ${n.message}
+                </li>
+            `).join('');
 
-                    // Play sound if new notifications arrive
-                    if (data.length > 0) {
-                        document.getElementById('notification-sound').play();
-                    }
-                });
-        }
+            // Play sound if new notifications arrive
+            if (data.length > 0) {
+                document.getElementById('notification-sound').play();
+            }
+        });
+}
 
-        // Mark notification as read
-        function markAsRead(notificationId, reportId) {
-            fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        // Redirect to the specific report
-                        window.location.href = `/reports/${reportId}`;
-                    }
-                });
-        }
+// Mark notification as read and redirect to notification.html
+function viewNotification(notificationId, reportId) {
+    fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to notification.html
+                window.location.href = `/notification.html?report_id=${reportId}`;
+            }
+        });
+}
 
-        // Toggle notifications dropdown
-        function toggleNotifications() {
-            const dropdown = document.getElementById('notifications-dropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
+// Toggle notifications dropdown
+function toggleNotifications() {
+    const dropdown = document.getElementById('notifications-dropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
 
-        // Initial fetch
-        fetchNotifications();
-        setInterval(fetchNotifications, 60000);
+// Initial fetch and refresh notifications every minute
+fetchNotifications();
+setInterval(fetchNotifications, 60000);
+
         
         function applyFilters() {
             // Get the filter values
