@@ -294,7 +294,7 @@
             </thead>
             <tbody>
                 {% for report in reports %}
-                    <tr class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %}">
+                    <tr id="report-{{ report.id }}" class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %}">
                         <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
                         <td>{{ report.title }}</td>
                         <td>
