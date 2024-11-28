@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Notification Details</h1>
+    <div id="notification-message">
+        <!-- Message will be populated here -->
+    </div>
+    <button onclick="goToAdminPanel()">Go to Admin Panel</button>
+
+    <script>
+        // Extract report_id from URL
+        const params = new URLSearchParams(window.location.search);
+        const reportId = params.get('report_id');
+        
+        // Display notification message
+        if (reportId) {
+            document.getElementById('notification-message').textContent = `Viewing details for report ID: ${reportId}`;
+        }
+
+        // Redirect back to admin panel
+        function goToAdminPanel() {
+            window.location.href = `/reports/${reportId}`;
+        }
+    </script>
+</body>
+</html>
