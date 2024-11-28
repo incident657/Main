@@ -69,6 +69,50 @@
             font-weight: bold;
         }
 
+        /* Ensure the entire table is wrapped in a scrollable container */
+.table-container {
+    max-height: 500px; /* You can adjust this value to set the maximum height of your table */
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Make the table header sticky */
+table th {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 10; /* Ensures the header is above the table content */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); /* Optional: adds shadow to header for better visibility */
+}
+
+/* Optional: Sticky first column */
+table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #fff; /* Keeps the background white to match table's row */
+    z-index: 5; /* Ensures the first column is above other columns when scrolling horizontally */
+}
+
+/* Optional: Ensure columns have enough width to prevent them from being squished */
+table th, table td {
+    min-width: 150px; /* Adjust according to your needs */
+}
+
+/* Optional: Slight margin on the left side to improve the layout */
+table td {
+    padding-left: 10px;
+}
+
+/* Style adjustments for table rows and alternating row colors */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -274,6 +318,7 @@
 <audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
 
         <!-- Reports Table -->
+        <div class="table-container">
         <table>
             <thead>
                 <tr>
@@ -339,6 +384,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         <!-- Location message -->
         <div id="location-message"></div>
