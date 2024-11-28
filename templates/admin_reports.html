@@ -238,6 +238,9 @@ tr:hover {
 .notifications-dropdown li:hover {
     background: #f1f1f1;
 }
+        .highlight {
+        background-color: #ffeb3b; /* Yellow highlight for selected report */
+    }
     </style>
 </head>
 <body>
@@ -377,6 +380,12 @@ tr:hover {
         <button type="submit">Apply Filters</button>
     </form>
 </div>
+
+    <tr id="report-{{ report.id }}" 
+    class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} 
+           {% if report.id == selected_report_id %}highlight{% endif %}">
+    ...
+</tr>
 
     <script>
 
