@@ -219,8 +219,8 @@ def setup_db():
 
 @app.route('/notification.html')
 def notification_page():
-    # Render the notification.html page (assuming it's in your templates folder)
     return render_template('notification.html')
+
 
     
 @app.route('/admin_reports')
@@ -243,6 +243,12 @@ def admin_reports():
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
         return render_template('error.html')  # Render an error page for graceful handling
+
+@app.route('/admin_reports')
+def admin_reports():
+    highlight_report_id = request.args.get('highlight')
+    # Pass this to the template for CSS highlighting logic
+    return render_template('admin_reports.html', highlight_report_id=highlight_report_id)
 
 
 @app.route('/logout')
