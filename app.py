@@ -235,7 +235,9 @@ def notification_page():
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
+    
     try:
+        # Fetch all reports
         reports = Report.query.all()
 
         # Add extra attributes for display
@@ -251,8 +253,9 @@ def admin_reports():
         )
 
         # Get report ID to highlight from query parameters
-        highlight_report_id = request.args.get('highlight')
+        highlight_report_id = request.args.get('highlight', type=int)
 
+        # Render the admin reports template
         return render_template(
             'admin_reports.html',
             reports=reports,
@@ -263,8 +266,6 @@ def admin_reports():
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
         return render_template('error.html')  # Render an error page for graceful handling
-
-
 
 @app.route('/logout')
 def logout():
