@@ -235,11 +235,13 @@ def notification_page():
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
-    
     try:
-        # Fetch all reports
         reports = Report.query.all()
 
+        # Check if 'reports' are retrieved properly
+        if not reports:
+            flash("No reports found", "info")
+        
         # Add extra attributes for display
         for report in reports:
             if report.timestamp:
@@ -253,9 +255,8 @@ def admin_reports():
         )
 
         # Get report ID to highlight from query parameters
-        highlight_report_id = request.args.get('highlight', type=int)
+        highlight_report_id = request.args.get('highlight')
 
-        # Render the admin reports template
         return render_template(
             'admin_reports.html',
             reports=reports,
