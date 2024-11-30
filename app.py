@@ -1,16 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 import folium
 from geopy.geocoders import Nominatim
 import os
-from flask import Flask, jsonify
 from werkzeug.utils import secure_filename
 
-app = create_app()
-
-app = Flask(__name__)
+# Initialize extensions globally
+db = SQLAlchemy()
+migrate = Migrate()
 
 UPLOAD_FOLDER = 'static/upload_files'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
@@ -18,29 +17,30 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', '
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# Use environment variables for sensitive data
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Initialize SQLAlchemy and Migrate
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
+# Application Factory
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
-    db.init_app(app)
 
-    # Add your routes or blueprints here
+    # Configuration settings
+    app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///mydatabase.db')  # Fallback for local development
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    # Initialize extensions with app
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    # Define routes
     @app.route('/')
     def index():
         return "Hello, Flask!"
+
+    # Additional routes and blueprints can be registered here
 
     return app
 
