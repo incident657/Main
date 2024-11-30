@@ -124,6 +124,8 @@ def submit_report():
     urgency_type = request.form['urgency_type']
     username = session.get('username') if not anonymous else None
 
+    username = None if anonymous else session.get('username')
+
     try:
         timestamp = datetime.strptime(report_date, '%Y-%m-%dT%H:%M')
     except ValueError:
