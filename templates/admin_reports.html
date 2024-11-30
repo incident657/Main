@@ -335,10 +335,12 @@ thead th {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Description</th>
+                    <th>Files</th>
                     <th>Anonymous</th>
                     <th>Status</th>
                     <th>Actions</th>
                     <th>Locate</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -355,6 +357,15 @@ thead th {
         <td>{{ report.date }}</td>
         <td>{{ report.time }}</td>
         <td>{{ report.description }}</td>
+        <td>
+                {% if report.uploaded_files %}
+                    {% for file in report.uploaded_files.split(',') %}
+                        <a href="{{ url_for('download_file', filename=file) }}" target="_blank">{{ file }}</a><br>
+                    {% endfor %}
+                {% else %}
+                    No files uploaded
+                {% endif %}
+            </td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
         <td>
