@@ -7,6 +7,12 @@ from geopy.geocoders import Nominatim
 import os
 from flask import Flask, jsonify
 from werkzeug.utils import secure_filename
+from app import db
+
+with db.engine.connect() as conn:
+    db.create_all(bind=conn)
+    print("Database synced with updated schema.")
+
 
 app = Flask(__name__)
 
