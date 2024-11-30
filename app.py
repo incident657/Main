@@ -169,9 +169,11 @@ def submit_report():
     return redirect(url_for('thank_you'))  # Corrected return statement and route name
 
 
-@app.route('/Thank_you')
+@app.route('/thank_you', methods=['GET'])
 def thank_you():
-    return render_template('Thank_you.html')  # Make sure the template exists in the templates directory
+    # Pass the 'anonymous' value to the template using query parameters
+    anonymous = request.args.get('anonymous') == 'true'
+    return render_template('Thank_you.html', anonymous=anonymous)  # Make sure the template exists in the templates directory
 
 
 @app.route('/submit_feedback', methods=['POST'])
