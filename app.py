@@ -7,11 +7,8 @@ from geopy.geocoders import Nominatim
 import os
 from flask import Flask, jsonify
 from werkzeug.utils import secure_filename
-from app import create_app
 
 app = create_app()
-
-
 
 app = Flask(__name__)
 
@@ -34,6 +31,18 @@ def allowed_file(filename):
 # Initialize SQLAlchemy and Migrate
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
+    db.init_app(app)
+
+    # Add your routes or blueprints here
+    @app.route('/')
+    def index():
+        return "Hello, Flask!"
+
+    return app
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
