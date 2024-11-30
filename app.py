@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = 'static/upload_files'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
 
 if not os.path.exists(UPLOAD_FOLDER):
