@@ -396,9 +396,9 @@ def locate_report(report_id):
         flash("No location data available for this report.", "error")
         return redirect('/admin_reports')
         
-@app.route('/health')
+@app.route('/health', methods=['GET'])
 def health_check():
-    return 'OK', 200
+    return jsonify({"status": "healthy"}), 200
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))  # Get the port from the environment variable
