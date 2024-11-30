@@ -6,14 +6,25 @@ import folium
 from geopy.geocoders import Nominatim
 import os
 from flask import Flask, jsonify
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # Use environment variables for sensitive data
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Initialize SQLAlchemy and Migrate
 db = SQLAlchemy(app)
@@ -53,6 +64,8 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
+    uploaded_files = db.Column(db.String(500), nullable=True)  # Stores file names as a comma-separated string
+
 
     def __repr__(self):
         return f"<Report {self.title}>"
@@ -131,6 +144,15 @@ def submit_report():
     except ValueError:
         timestamp = None
 
+    uploaded_files = request.files.getlist('file')  # Allow multiple files
+    saved_files = []
+    for file in uploaded_files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            saved_files.append(filename)  # Save filenames to link with the report
+
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
     longitude = request.form.get('longitude')
@@ -155,6 +177,7 @@ def submit_report():
         incident_type=incident_type,
         severity_type=severity_type,
         urgency_type=urgency_type,
+        uploaded_files=",".join(saved_files) if saved_files else None
     )
     db.session.add(new_report)
     db.session.commit()
@@ -232,6 +255,11 @@ def setup_db():
 @app.route('/notification.html')
 def notification_page():
     return render_template('notification.html')
+
+@app.route('/uploads/<filename>')
+def download_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 @app.route('/admin_reports')
 def admin_reports():
