@@ -283,17 +283,6 @@ def delete_report(id):
         flash("Report not found!", 'error')
     return redirect('/admin_reports')
 
-@app.route('/search_filter_reports')
-def search_filter_reports():
-    # Retrieve search query and filter values from query parameters
-    search_query = request.args.get('search', '').lower()
-    date_filter = request.args.get('date')
-    category_filter = request.args.get('category')
-    status_filter = request.args.get('status')
-
-    # Build the base query
-    query = Report.query
-
     # Apply search filter
 @app.route('/search_filter_reports')
 def search_filter_reports():
