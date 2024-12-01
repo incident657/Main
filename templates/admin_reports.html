@@ -358,8 +358,8 @@ thead th {
         <td>{{ report.time }}</td>
         <td>{{ report.description }}</td>
 <td>
-    {% if report.uploaded_files %}
-        {% for file in report.uploaded_files.split(',') %}
+    {% if report.Files %}
+        {% for file in report.Files.split(',') %}
             <a href="{{ url_for('download_file', filename=file.strip()) }}" target="_blank">{{ file.strip() }}</a><br>
         {% endfor %}
     {% else %}
