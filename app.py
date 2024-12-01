@@ -128,7 +128,7 @@ def submit_report():
     username = None if anonymous else session.get('username')
 
     try:
-        timestamp = datetime.strptime(report_date, '%Y-%m-%dT%H:%M')
+        timestamp = datetime.strptime(report_date, '%b %d, %YT%H:%M')
     except ValueError:
         timestamp = None
             
@@ -303,7 +303,7 @@ def search_filter_reports():
 
     if date_filter:
         try:
-            date_obj = datetime.strptime(date_filter, '%Y-%m-%d')
+            date_obj = datetime.strptime(date_filter, '%b %d, %Y')
             query = query.filter(Report.timestamp >= date_obj)  # Replace 'timestamp' with your correct field.
         except ValueError:
             pass
