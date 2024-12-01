@@ -10,17 +10,10 @@ from flask import send_from_directory
 
 app = Flask(__name__)
 
-    # Configuration settings
-UPLOAD_FOLDER = 'static/upload_files'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///mydatabase.db')  # Fallback for local development
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
 
     # Initialize extensions with app
 db = SQLAlchemy(app)  # Initialize db with app
@@ -60,7 +53,6 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
-    uploaded_files = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return f"<Report {self.title}>"
@@ -68,9 +60,6 @@ class Report(db.Model):
 # Initialize the database
 with app.app_context():
     db.create_all()
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # Geocoding function
@@ -142,15 +131,7 @@ def submit_report():
         timestamp = datetime.strptime(report_date, '%Y-%m-%dT%H:%M')
     except ValueError:
         timestamp = None
-
-    uploaded_files = request.files.getlist('file')  # Get the list of uploaded files
-    saved_files = []
-    for file in uploaded_files:
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)  # Save the file in the upload folder
-            saved_files.append(filename)  # Add file name to the list
+            
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
     longitude = request.form.get('longitude')
@@ -175,7 +156,6 @@ def submit_report():
         incident_type=incident_type,
         severity_type=severity_type,
         urgency_type=urgency_type,
-        uploaded_files=",".join(saved_files)
     )
     db.session.add(new_report)
     db.session.commit()
@@ -253,10 +233,6 @@ def setup_db():
 @app.route('/notification.html')
 def notification_page():
     return render_template('notification.html')
-
-@app.route('/download/<filename>')
-def download_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 @app.route('/admin_reports')
 def admin_reports():
