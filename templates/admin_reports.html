@@ -298,12 +298,38 @@ thead th {
         <h2>Admin Reports</h2>
 
         <!-- Search Form -->
-        <div class="search-form">
-            <form action="/search_reports" method="GET">
-                <input type="text" name="search" placeholder="Search by Username, Title, or Incident Type" required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
+        <div class="search-filter-container">
+    <form action="/search_filter_reports" method="GET">
+        <!-- Search Input -->
+        <input type="text" name="search" placeholder="Search by Username, Title, or Incident Type" value="{{ request.args.get('search', '') }}">
+        
+        <!-- Date Filter -->
+        <label for="filter-date">Date:</label>
+        <input type="date" id="filter-date" name="date" value="{{ request.args.get('date', '') }}">
+        
+        <!-- Category Filter -->
+        <label for="filter-category">Category:</label>
+        <select id="filter-category" name="category">
+            <option value="">All Categories</option>
+            <option value="Health and Safety" {% if request.args.get('category') == 'Health and Safety' %}selected{% endif %}>Health and Safety</option>
+            <option value="Criminal Incidents" {% if request.args.get('category') == 'Criminal Incidents' %}selected{% endif %}>Criminal Incidents</option>
+            <option value="Environmental Incidents" {% if request.args.get('category') == 'Environmental Incidents' %}selected{% endif %}>Environmental Incidents</option>
+            <option value="Public Disturbances" {% if request.args.get('category') == 'Public Disturbances' %}selected{% endif %}>Public Disturbances</option>
+            <option value="Infrastructure Issues" {% if request.args.get('category') == 'Infrastructure Issues' %}selected{% endif %}>Infrastructure Issues</option>
+        </select>
+        
+        <!-- Status Filter -->
+        <label for="filter-status">Status:</label>
+        <select id="filter-status" name="status">
+            <option value="">All Statuses</option>
+            <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="resolved" {% if request.args.get('status') == 'resolved' %}selected{% endif %}>Resolved</option>
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit">Search & Filter</button>
+    </form>
+</div>
 
         <!-- Warning message displayed when a critical incident is found -->
         <div id="warning">
@@ -405,33 +431,6 @@ thead th {
     <div style="position: fixed; bottom: 20px; right: 20px;">
         <a href="{{ url_for('admin_feedbacks') }}" class="button feedback-btn">Feedback</a>
     </div>
-
-    <div class="filters-container">
-    <form action="/filter" method="GET">
-        <label for="filter-date">Filter by Date:</label>
-        <input type="date" id="filter-date" name="date">
-      
-        <label for="filter-category">Filter by Category:</label>
-        <select id="filter-category" name="category">
-            <option value="">All Categories</option>
-            <option value="Health and Safety">Health and Safety</option>
-            <option value="Criminal Incidents">Criminal Incidents</option>
-            <option value="Environmental Incidents">Environmental Incidents</option>
-            <option value="Public Disturbances">Public Disturbances</option>
-            <option value="Infrastructure Issues">Infrastructure Issues</option>
-        </select>
-      
-        <label for="filter-status">Filter by Status:</label>
-        <select id="filter-status" name="status">
-            <option value="">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="resolved">Resolved</option>
-        </select>
-      
-        <button type="submit">Apply Filters</button>
-    </form>
-</div>
-    
 
     <script>
 
