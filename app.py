@@ -261,23 +261,23 @@ def admin_reports():
         reports = Report.query.all()
 
         # Handle the case where there are no reports
-        if not reports:  # If the list is empty
+        if not reports:
             flash("No reports are available.", "info")
             return render_template('admin_reports.html', reports=[], warning_sign=False)
 
-        # Add extra attributes for display
+        # Process reports if available
         for report in reports:
             if report.timestamp:
                 report.date = report.timestamp.strftime('%b %d, %Y')
                 report.time = report.timestamp.strftime('%I:%M %p')
 
-        # Determine if any critical and immediate report exists
+        # Check if any report is critical and urgent
         warning_sign = any(
             report.severity_type.lower() == 'critical' and report.urgency_type.lower() == 'immediate'
             for report in reports
         )
 
-        # Get report ID to highlight from query parameters
+        # Retrieve highlighted report from query parameters
         highlight_report_id = request.args.get('highlight')
 
         return render_template(
