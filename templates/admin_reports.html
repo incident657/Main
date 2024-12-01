@@ -382,7 +382,7 @@ thead th {
         <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
         <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
         <td>{{ report.description }}</td>
-        <td><a href="javascript:void(0)" onclick="markAsRead({{ notification.id }}, {{ report.id }})">Mark as Read</a></td>
+        <td><a href="javascript:void(0)" onclick="markAsRead({{ report.notification.id }}, {{ report.id }})">Mark as Read</a></td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
         <td>
