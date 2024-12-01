@@ -23,8 +23,8 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
     # Initialize extensions with app
-    db = SQLAlchemy(app)  # Initialize db with app
-    migrate = Migrate(app, db)  # Initialize migrate with app and db
+db = SQLAlchemy(app)  # Initialize db with app
+migrate = Migrate(app, db)  # Initialize migrate with app and db
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
