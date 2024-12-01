@@ -7,6 +7,8 @@ from geopy.geocoders import Nominatim
 import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
+
+app = Flask(__name__)
 # Initialize extensions globally
 db = SQLAlchemy()
 migrate = Migrate()
