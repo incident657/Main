@@ -340,7 +340,13 @@ thead th {
     <span class="notification-word" onclick="window.location.href='/notification.html'">Notification</span>
     <span class="count" id="notification-count"></span>
     <div class="notifications-dropdown" id="notifications-dropdown">
-        <ul id="notification-list"></ul>
+        <ul id="notification-list">
+    {% for report in reports %}
+    <li onclick="markAsReadAndNavigate({{ report.notifications[0].id }}, {{ report.id }})">
+        {{ report.title }} - {{ report.time }}
+    </li>
+    {% endfor %}
+</ul>
     </div>
 </div>
 
@@ -371,6 +377,10 @@ thead th {
             <tbody>
                {% for report in reports %}
     <tr id="report-{{ report.id }}" class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} {% if report.id == selected_report_id %}highlight{% endif %}">
+        {% if highlight_report_id and highlight_report_id|int == report.id %} 
+            style="background-color: #ffff99;" 
+            {% endif %}
+            onclick="markAsReadAndNavigate({{ report.notifications[0].id }}, {{ report.id }})">
         <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
         <td>{{ report.title }}</td>
         <td>
@@ -382,15 +392,6 @@ thead th {
         <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
         <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
         <td>{{ report.description }}</td>
-        <td>
-        {% if report.notifications %}
-            <a href="javascript:void(0)" onclick="markAsRead({{ report.notifications[0].id }}, {{ report.id }})">
-                Mark as Read
-            </a>
-        {% else %}
-            No notifications
-        {% endif %}
-    </td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
         <td>
@@ -439,6 +440,8 @@ thead th {
             </form>
         </div>
     </div>
+
+    
 
     <div style="position: fixed; bottom: 20px; right: 20px;">
         <a href="{{ url_for('admin_feedbacks') }}" class="button feedback-btn">Feedback</a>
