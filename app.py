@@ -375,21 +375,6 @@ def locate_report(report_id):
         flash("No location data available for this report.", "error")
         return redirect('/admin_reports')
 
-@app.route('/fetch_new_reports', methods=['GET'])
-def fetch_new_reports():
-    # Get the last seen timestamp from the frontend
-    last_timestamp = request.args.get('last_timestamp')
-    last_seen_time = datetime.fromisoformat(last_timestamp) if last_timestamp else datetime.min
-
-    # Fetch reports added after the last seen timestamp
-    new_reports = Report.query.filter(Report.timestamp > last_seen_time).order_by(Report.timestamp).all()
-
-    return jsonify([{
-        "id": r.id,
-        "title": r.title,
-        "location": r.location,
-        "timestamp": r.timestamp.isoformat()
-    } for r in new_reports])
         
 @app.route('/health', methods=['GET'])
 def health_check():
