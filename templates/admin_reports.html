@@ -30,6 +30,8 @@ h2 {
     padding: 20px;
     border-radius: 10px;
     position: relative;
+    overflow-x: auto;
+    max-height: 80vh;  /* Makes the container scrollable */
 }
 
 .search-form {
@@ -78,6 +80,7 @@ table {
     margin-top: 20px;
     overflow-x: auto;
     display: block;
+    border: 1px solid #555;  /* Border around the table */
 }
 
 th, td {
@@ -93,6 +96,7 @@ th {
     position: sticky;
     top: 0;
     z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Adds shadow for sticky effect */
 }
 
 td {
@@ -270,9 +274,7 @@ tr:hover {
 .filters-container button:hover {
     background-color: #e60000;
 }
-        .highlight {
-        background-color: #ffeb3b; /* Yellow highlight for selected report */
-    }
+
     </style>
 </head>
 <body>
