@@ -187,12 +187,10 @@ def thank_you():
     return render_template('Thank_you.html', anonymous=anonymous)  # Make sure the template exists in the templates directory
 
 @app.route('/thank_you/<int:report_id>', methods=['GET'])
-def thank_you(report_id):
+def thank_you_report(report_id):
     report = Report.query.get_or_404(report_id)
     audit_trail = AuditTrail.query.filter_by(report_id=report.id).all()
-    
     return render_template('thank_you.html', report=report, audit_trail=audit_trail)
-
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
