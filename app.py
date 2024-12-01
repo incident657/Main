@@ -295,6 +295,15 @@ def search_filter_reports():
     query = Report.query
 
     # Apply search filter
+@app.route('/search_filter_reports')
+def search_filter_reports():
+    search_query = request.args.get('search')
+    date_filter = request.args.get('date')
+    category_filter = request.args.get('category')
+    status_filter = request.args.get('status')
+
+    query = Report.query
+
     if search_query:
         query = query.filter(
             Report.title.ilike(f'%{search_query}%') |
@@ -302,29 +311,22 @@ def search_filter_reports():
             Report.username.ilike(f'%{search_query}%') |
             Report.incident_type.ilike(f'%{search_query}%')
         )
-    
-    # Apply date filter
+
     if date_filter:
         try:
             date_obj = datetime.strptime(date_filter, '%Y-%m-%d')
-            query = query.filter(Report.date == date_obj)
+            query = query.filter(Report.timestamp >= date_obj)  # Replace 'timestamp' with your correct field.
         except ValueError:
-            pass  # Ignore invalid dates
-    
-    # Apply category filter
+            pass
+
     if category_filter:
         query = query.filter(Report.incident_type.ilike(f'%{category_filter}%'))
-    
-    # Apply status filter
+
     if status_filter:
         query = query.filter(Report.status.ilike(f'%{status_filter}%'))
 
-    # Execute the query and fetch reports
     reports = query.all()
-
-    # Render the template with the filtered reports
     return render_template('admin_reports.html', reports=reports)
-
 
 @app.route('/mark_as_done/<int:id>', methods=['POST'])
 def mark_as_done(id):
