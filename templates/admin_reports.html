@@ -467,7 +467,7 @@ function markAsRead(notificationId, reportId) {
         .then(response => {
             if (response.ok) {
                 // Redirect to the specific report and highlight it
-                window.location.href = /reports/${reportId};
+                window.location.href = '/reports/' + reportId;
             }
         });
 }
