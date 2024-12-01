@@ -257,16 +257,19 @@ def notification_page():
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
-
     try:
-        # Fetch all reports ordered by timestamp
-        reports = Report.query.order_by(Report.timestamp.desc()).all()
+        reports = Report.query.all()
 
-        # Process each report to include extra attributes for display
+        # Handle the case where there are no reports
+        if not reports:  # If the list is empty
+            flash("No reports are available.", "info")
+            return render_template('admin_reports.html', reports=[], warning_sign=False)
+
+        # Add extra attributes for display
         for report in reports:
             if report.timestamp:
-                report.date = report.timestamp.strftime('%b %d, %Y')  # e.g., Dec 01, 2024
-                report.time = report.timestamp.strftime('%I:%M %p')  # e.g., 03:45 PM
+                report.date = report.timestamp.strftime('%b %d, %Y')
+                report.time = report.timestamp.strftime('%I:%M %p')
 
         # Determine if any critical and immediate report exists
         warning_sign = any(
@@ -284,10 +287,10 @@ def admin_reports():
             highlight_report_id=highlight_report_id
         )
     except Exception as e:
-        # Log and handle errors gracefully
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
-        return render_template('error.html')  # Render an error page for graceful handling
+        return render_template('error.html')
+ # Render an error page for graceful handling
 
 @app.route('/logout')
 def logout():
