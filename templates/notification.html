@@ -7,25 +7,28 @@
     <style>
         /* General styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            background-color: #007BFF;
+            background-color: #D32F2F; /* Red color */
             color: white;
-            padding: 15px 0;
+            padding: 20px 0;
             margin: 0;
+            text-transform: uppercase;
+            font-size: 2em;
         }
 
         /* Notifications list styling */
         ul {
             list-style-type: none;
             padding: 20px;
-            margin: 0 auto;
+            margin: 20px auto;
             max-width: 600px;
             background: white;
             border-radius: 8px;
@@ -33,10 +36,10 @@
         }
 
         li {
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-bottom: 1px solid #ddd;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
         li:hover {
@@ -45,6 +48,28 @@
 
         li:last-child {
             border-bottom: none;
+        }
+
+        /* Link styling for notification actions */
+        li a {
+            color: #D32F2F; /* Red color */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333; /* Dark gray */
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -77,5 +102,9 @@
                 });
         }
     </script>
+
+    <footer>
+        <p>&copy; 2024 Barangay Incident Reporting System</p>
+    </footer>
 </body>
 </html>
