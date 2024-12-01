@@ -379,8 +379,8 @@ thead th {
         <td>{{ report.severity_type }}</td>
         <td>{{ report.urgency_type }}</td>
         <td>{{ report.location }}</td>
-        <td>{{ report.timestamp.strftime('%Y-%m-%d') if report.timestamp else 'N/A' }}</td>
-        <td>{{ report.timestamp.strftime('%H:%M:%S') if report.timestamp else 'N/A' }}</td>
+        <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
+        <td>{{ report.timestamp.strftime('%H:%M:%S') }}</td>
         <td>{{ report.description }}</td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
