@@ -135,8 +135,6 @@ def submit_report():
     urgency_type = request.form['urgency_type']
     username = session.get('username') if not anonymous else None
 
-    username = None if anonymous else session.get('username')
-
     try:
         timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
     except ValueError:
@@ -177,12 +175,12 @@ def submit_report():
 
      # Flash a success message and redirect to the Thank You page
     flash("Report submitted successfully!", "success")
-    return redirect(url_for('thank_you'))  # Corrected return statement and route name
+    return redirect(url_for('thank_you', anonymous='true' if anonymous else 'false'))
 
 
 @app.route('/thank_you', methods=['GET'])
 def thank_you():
-    # Pass the 'anonymous' value to the template using query parameters
+    # Retrieve the 'anonymous' query parameter and pass it to the template
     anonymous = request.args.get('anonymous') == 'true'
     return render_template('Thank_you.html', anonymous=anonymous)  # Make sure the template exists in the templates directory
 
