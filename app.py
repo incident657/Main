@@ -32,8 +32,10 @@ class AuditTrail(db.Model):
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
-    report_id = db.Column(db.Integer, nullable=True)  # Link to the report
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'))  # Link to the report
     is_read = db.Column(db.Boolean, default=False)
+
+    report = db.relationship('Report', backref='notifications')
 
     def __repr__(self):
         return f'<Notification {self.id}>'
@@ -219,7 +221,7 @@ def mark_notification_as_read(notification_id):
     if notification:
         notification.is_read = True
         db.session.commit()
-        return jsonify({"success": True})
+        return jsonify({"success": True, "report_id": notification.report_id})
     return jsonify({"success": False}), 404
 
 # Add a new report (for testing purposes)
