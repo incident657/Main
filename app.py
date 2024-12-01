@@ -6,7 +6,7 @@ import folium
 from geopy.geocoders import Nominatim
 import os
 from werkzeug.utils import secure_filename
-
+from flask import send_from_directory
 # Initialize extensions globally
 db = SQLAlchemy()
 migrate = Migrate()
@@ -181,7 +181,6 @@ def submit_report():
         incident_type=incident_type,
         severity_type=severity_type,
         urgency_type=urgency_type,
-        uploaded_files=",".join(saved_files) if saved_files else None
     )
     db.session.add(new_report)
     db.session.commit()
@@ -260,10 +259,11 @@ def setup_db():
 def notification_page():
     return render_template('notification.html')
 
-@app.route('/uploads/<filename>')
+@app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
+    # Adjust the path to your file storage
+    file_path = os.path.join('path_to_your_files', filename)
+    return send_from_directory(os.path.dirname(file_path), os.path.basename(file_path))
 
 @app.route('/admin_reports')
 def admin_reports():
