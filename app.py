@@ -277,19 +277,16 @@ def admin_reports():
             for report in reports
         )
 
-        # Retrieve highlighted report from query parameters
-        highlight_report_id = request.args.get('highlight')
-
         return render_template(
             'admin_reports.html',
             reports=reports,
-            warning_sign=warning_sign,
-            highlight_report_id=highlight_report_id
+            warning_sign=warning_sign
         )
     except Exception as e:
-        app.logger.error(f"Error in admin_reports: {e}")
+        app.logger.error(f"Error in admin_reports: {e}", exc_info=True)
         flash("An error occurred while fetching admin reports.", "error")
         return render_template('error.html')
+
  # Render an error page for graceful handling
 
 @app.route('/logout')
