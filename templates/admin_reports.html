@@ -6,37 +6,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <title>Admin Panel</title>
     <style>
-       body {
+      body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #2c2f38; /* Dark background */
+    background-color: #2c2f38;  /* Dark background for contrast */
     margin: 0;
     padding: 0;
-    color: #d1d1d1; /* Light text */
+    color: #d1d1d1;  /* Light text for readability */
 }
 
 h2 {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
     text-align: center;
-    background-color: #2c2f38;
-    margin: 0;
-    padding: 20px;
-    color: #ff4d4d;
+    margin-bottom: 20px;
+    color: #ff4d4d;  /* Red color for titles */
     font-size: 2.5em;
     font-weight: bold;
-    border-bottom: 2px solid #444;
+}
+
+.container {
+    width: 100%;
+    margin: 20px auto;
+    background-color: #333;  /* Dark container for contrast */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    overflow-x: auto;
+    max-height: 80vh;  /* Makes the container scrollable */
 }
 
 .search-form {
     display: flex;
     justify-content: flex-end;
-    padding: 10px;
-    background-color: #2c2f38;
-    position: sticky;
-    top: 70px; /* Below the title */
-    z-index: 1000;
-    border-bottom: 2px solid #444;
+    margin-bottom: 20px;
 }
 
 .search-form input[type="text"] {
@@ -52,7 +53,7 @@ h2 {
 
 .search-form button {
     padding: 10px 20px;
-    background-color: #ff4d4d;
+    background-color: #ff4d4d;  /* Red button */
     color: white;
     border: none;
     border-radius: 4px;
@@ -61,84 +62,219 @@ h2 {
 }
 
 .search-form button:hover {
-    background-color: #e60000;
+    background-color: #e60000;  /* Darker red on hover */
 }
 
-.container {
-    margin: 0 auto;
-    background-color: #333;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
+#warning {
+    display: none;
+    color: red;
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
 }
 
 table {
+    width: 100%;
     border-collapse: collapse;
-    width: 100%;
-    margin: 0;
-}
-
-thead {
-    position: sticky;
-    top: 130px; /* Below the search form */
-    z-index: 900;
-    background-color: #444;
-}
-
-thead th {
-    font-weight: bold;
-    color: #fff;
-    padding: 15px;
-    text-align: left;
-    border: 1px solid #555;
-    white-space: nowrap;
-}
-
-tbody {
+    margin-top: 20px;
+    overflow-x: auto;
     display: block;
-    max-height: calc(100% - 180px); /* Adjust for sticky title and search form */
-    overflow: auto;
+    border: 1px solid #555;  /* Border around the table */
 }
 
-tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed; /* Prevent column shrinking */
-}
-
-tbody td {
-    padding: 15px;
+th, td {
+    padding: 12px;
     text-align: left;
     border: 1px solid #555;
+}
+
+th {
+    background-color: #444;
+    color: #fff;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Adds shadow for sticky effect */
+}
+
+td {
     background-color: #333;
     color: #fff;
 }
 
-tr:nth-child(even) td {
+tr:nth-child(even) {
     background-color: #444;
 }
 
-tr:hover td {
+tr:hover {
     background-color: #555;
 }
 
-/* Expand column width for better readability */
-th, td {
-    min-width: 150px;
-}
-
 .filters-bar {
-    position: sticky;
-    bottom: 0;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
     background-color: #333;
     padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    border-top: 2px solid #444;
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
+
+.filters-bar label {
+    font-size: 14px;
+    color: #d1d1d1;
+}
+
+.filters-bar input,
+.filters-bar select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #444;
+    color: #fff;
+}
+
+.filters-bar button {
+    padding: 8px 16px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filters-bar button:hover {
+    background-color: #e60000;
+}
+
+.logout-btn {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.logout-btn button {
+    padding: 12px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-btn button:hover {
+    background-color: #e60000;
+}
+
+.notification-bell {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    cursor: pointer;
+    color: white;
+}
+
+.notification-word {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ff4d4d;  /* Red notification color */
+}
+
+.count {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    margin-left: 5px;
+    font-size: 0.8em;
+}
+
+.notifications-dropdown {
+    display: none;
+    position: absolute;
+    background: #333;
+    border: 1px solid #444;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    top: 30px;
+    left: 0;
+    width: 200px;
+    z-index: 10;
+}
+
+.notifications-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notifications-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.notifications-dropdown li:hover {
+    background: #555;
+}
+
+.filters-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #333;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.filters-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #d1d1d1;
+}
+
+.filters-container input,
+.filters-container select {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #555;
+    background-color: #444;
+    color: #fff;
+}
+
+.filters-container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filters-container button:hover {
+    background-color: #e60000;
+}
+
 
 /* Change Feedback to white */
 .feedback {
