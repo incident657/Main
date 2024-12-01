@@ -213,11 +213,11 @@ def get_notifications():
     } for n in notifications])
 
 # Mark a notification as read
-@app.route('/mark_report_old/<int:report_id>', methods=['POST'])
-def mark_report_old(report_id):
-    report = Report.query.get(report_id)
-    if report:
-        report.is_new = False
+@app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
+def mark_notification_read(notification_id):
+    notification = Notification.query.get(notification_id)
+    if notification:
+        notification.is_read = True
         db.session.commit()
         return jsonify({"success": True})
     return jsonify({"success": False}), 404
