@@ -410,7 +410,10 @@ thead th {
                             </form>
                         </td>
 
-                        
+                        <td>
+    <a href="{{ url_for('thank_you', report_id=report.id) }}" class="btn btn-info">View Audit Trail</a>
+</td>
+
                     </tr>
                 {% endfor %}
             </tbody>
