@@ -283,46 +283,47 @@ def delete_report(id):
         flash("Report not found!", 'error')
     return redirect('/admin_reports')
 
-@app.route('/search_reports')
-def search_reports():
-    search_query = request.args.get('search')
-    reports = Report.query.filter(
-        Report.title.ilike(f'%{search_query}%') |
-        Report.location.ilike(f'%{search_query}%') |
-        Report.username.ilike(f'%{search_query}%') |
-        Report.incident_type.ilike(f'%{search_query}%')
-    ).all() if search_query else Report.query.all()
-    return render_template('admin_reports.html', reports=reports)
-
-@app.route('/filter')
-def filter_reports():
-    # Retrieve the filter values from the query parameters
+@app.route('/search_filter_reports')
+def search_filter_reports():
+    # Retrieve search query and filter values from query parameters
+    search_query = request.args.get('search', '').lower()
     date_filter = request.args.get('date')
     category_filter = request.args.get('category')
     status_filter = request.args.get('status')
 
-    # Build the query based on the provided filters
+    # Build the base query
     query = Report.query
 
+    # Apply search filter
+    if search_query:
+        query = query.filter(
+            Report.title.ilike(f'%{search_query}%') |
+            Report.location.ilike(f'%{search_query}%') |
+            Report.username.ilike(f'%{search_query}%') |
+            Report.incident_type.ilike(f'%{search_query}%')
+        )
+    
+    # Apply date filter
     if date_filter:
         try:
-            # Convert the date string to a datetime object for comparison
             date_obj = datetime.strptime(date_filter, '%Y-%m-%d')
-            query = query.filter(Report.timestamp >= date_obj)  # Filter reports by date
+            query = query.filter(Report.date == date_obj)
         except ValueError:
-            pass  # Ignore if the date format is incorrect
-
+            pass  # Ignore invalid dates
+    
+    # Apply category filter
     if category_filter:
-        query = query.filter(Report.incident_type.ilike(f'%{category_filter}%'))  # Filter by category (incident_type)
-
+        query = query.filter(Report.incident_type.ilike(f'%{category_filter}%'))
+    
+    # Apply status filter
     if status_filter:
-        query = query.filter(Report.status.ilike(f'%{status_filter}%'))  # Filter by status
+        query = query.filter(Report.status.ilike(f'%{status_filter}%'))
 
-    # Execute the query and get the filtered reports
+    # Execute the query and fetch reports
     reports = query.all()
 
-    # Pass the filtered reports to the filter.html template
-    return render_template('filter.html', reports=reports)
+    # Render the template with the filtered reports
+    return render_template('admin_reports.html', reports=reports)
 
 
 @app.route('/mark_as_done/<int:id>', methods=['POST'])
