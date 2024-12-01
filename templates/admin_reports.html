@@ -82,65 +82,91 @@ h2 {
 }
 
 /* Table and Column Header Styling */
+/* General Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     border: 1px solid #555;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    white-space: nowrap; /* Prevent text wrapping for headers */
+}
+
+thead, tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensure all columns respect assigned widths */
+}
+
+tbody {
+    display: block;
+    max-height: calc(80vh - 100px); /* Adjust height dynamically */
+    overflow-y: auto; /* Vertical scrolling */
+    overflow-x: hidden; /* Prevent double scrollbars */
 }
 
 th, td {
     padding: 12px;
     text-align: left;
     border: 1px solid #555;
+    overflow-wrap: break-word; /* Prevent long text overflow */
 }
 
-th {
-    background-color: #444;
-    color: #fff;
-    font-weight: bold;
-    position: sticky;
-    top: 50px; /* Adjust depending on the height of the search form */
-    z-index: 100; /* Ensure it stays above table rows */
+/* Column Widths - Specific to Columns */
+th:nth-child(1), td:nth-child(1) { /* Username */
+    min-width: 200px;
 }
 
-td {
-    background-color: #333;
-    color: #fff;
-    min-width: 150px; /* Ensures better readability for wider columns */
+th:nth-child(2), td:nth-child(2) { /* Title */
+    min-width: 300px;
 }
 
-tr:nth-child(even) {
-    background-color: #444;
+th:nth-child(3), td:nth-child(3) { /* Incident Type */
+    min-width: 250px;
 }
 
-tr:hover {
-    background-color: #555;
+th:nth-child(4), td:nth-child(4) { /* Severity Type */
+    min-width: 200px;
 }
 
-/* Allow Horizontal Scrolling for the Table */
-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+th:nth-child(5), td:nth-child(5) { /* Urgency Type */
+    min-width: 200px;
 }
 
-/* Smooth Scrolling for Data Rows */
-tbody {
-    display: block;
-    max-height: calc(80vh - 100px); /* Adjust to fit within the container */
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent double horizontal scrollbars */
+th:nth-child(6), td:nth-child(6) { /* Location */
+    min-width: 300px;
 }
 
-thead, tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+th:nth-child(7), td:nth-child(7) { /* Date */
+    min-width: 150px;
 }
 
-td {
-    overflow-wrap: break-word;
+th:nth-child(8), td:nth-child(8) { /* Time */
+    min-width: 150px;
+}
+
+th:nth-child(9), td:nth-child(9) { /* Description */
+    min-width: 400px; /* Wider for more content */
+}
+
+th:nth-child(10), td:nth-child(10) { /* Anonymous */
+    min-width: 150px;
+}
+
+th:nth-child(11), td:nth-child(11) { /* Status */
+    min-width: 200px;
+}
+
+th:nth-child(12), td:nth-child(12) { /* Actions */
+    min-width: 150px;
+}
+
+th:nth-child(13), td:nth-child(13) { /* Locate */
+    min-width: 150px;
+}
+
+th:nth-child(14), td:nth-child(14) { /* Remove */
+    min-width: 150px;
 }
 
 /* Filters Bar and Other Components */
