@@ -10,22 +10,22 @@
             font-family: Arial, sans-serif;
             background: url('static/red.jpg') no-repeat center center fixed;
             background-size: cover;
-            color: #333;
+            color: #f0f0f0;  /* Lighter text for contrast */
             line-height: 1.6;
         }
 
         .container {
             max-width: 800px;
             margin: 50px auto;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 0, 0, 0.7);  /* Darkened background */
             border-radius: 8px;
             padding: 20px 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
 
         .container h1 {
             text-align: center;
-            color: #4CAF50;
+            color: #e63946;  /* Red color */
             font-size: 28px;
             margin-bottom: 10px;
         }
@@ -33,7 +33,7 @@
         .container p {
             text-align: center;
             font-size: 14px;
-            color: #666;
+            color: #f0f0f0;
             margin-bottom: 20px;
         }
 
@@ -48,7 +48,7 @@
 
         .form-group label {
             font-weight: bold;
-            color: #444;
+            color: #f0f0f0;
             margin-bottom: 8px;
             display: block;
         }
@@ -62,7 +62,7 @@
             border-radius: 5px;
             font-size: 14px;
             color: #333;
-            background-color: #f9f9f9;
+            background-color: #444;  /* Darker background for inputs */
         }
 
         .form-group textarea {
@@ -70,7 +70,7 @@
         }
 
         .btn-submit {
-            background-color: #4CAF50;
+            background-color: #e63946;  /* Red button */
             color: white;
             border: none;
             padding: 12px;
@@ -81,16 +81,22 @@
         }
 
         .btn-submit:hover {
-            background-color: #45a049;
+            background-color: #d62828;  /* Darker red on hover */
         }
 
         .footer-note {
             text-align: center;
             font-size: 12px;
-            color: #666;
+            color: #f0f0f0;
             margin-top: 20px;
         }
-        
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #e63946;  /* Red border on focus */
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -146,24 +152,23 @@
             </div>
 
             <!-- Location -->
-           <div class="form-group">
-    <label for="location_choice">How would you like to provide your location?</label>
-    <select id="location_choice" name="location_choice" onchange="toggleLocationFields()" required>
-        <option value="manual">Manually Enter Location</option>
-        <option value="auto">Allow Admin to Detect Your Location</option>
-    </select>
-</div>
+            <div class="form-group">
+                <label for="location_choice">How would you like to provide your location?</label>
+                <select id="location_choice" name="location_choice" onchange="toggleLocationFields()" required>
+                    <option value="manual">Manually Enter Location</option>
+                    <option value="auto">Allow Admin to Detect Your Location</option>
+                </select>
+            </div>
 
-<!-- Manual Location Input -->
-<div class="form-group" id="manual_location" style="display:none;">
-    <label for="report_location">Write the location</label>
-    <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
-</div>
+            <!-- Manual Location Input -->
+            <div class="form-group" id="manual_location" style="display:none;">
+                <label for="report_location">Write the location</label>
+                <input type="text" id="report_location" name="report_location" placeholder="Enter the location">
+            </div>
 
-<!-- Hidden Fields for Latitude and Longitude -->
-<input type="hidden" id="latitude" name="latitude">
-<input type="hidden" id="longitude" name="longitude">
-
+            <!-- Hidden Fields for Latitude and Longitude -->
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
 
             <!-- Date and Time -->
             <div class="form-group">
@@ -177,15 +182,13 @@
                 <textarea id="report_description" name="report_description" rows="4" placeholder="Describe the incident in detail" required></textarea>
             </div>
 
-
             <!-- Anonymous Submission -->
-           <div class="form-group">
-    <label for="anonymous">
-        <input type="checkbox" id="anonymous" name="anonymous" value="true">
-        Submit Anonymously
-    </label>
-</div>
-
+            <div class="form-group">
+                <label for="anonymous">
+                    <input type="checkbox" id="anonymous" name="anonymous" value="true">
+                    Submit Anonymously
+                </label>
+            </div>
 
             <!-- Submit Button -->
             <button type="submit" class="btn-submit">Submit Report</button>
@@ -196,7 +199,6 @@
     </div>
 
     <script>
-
         function toggleIncidentTypeFields() {
             const incidentType = document.getElementById('incident_type').value;
             const otherIncident = document.getElementById('other_incident');
@@ -209,31 +211,28 @@
                 document.getElementById('other_description').value = ''; // Clear the custom description if not needed
             }
         }
-        // Toggle visibility of the "Other Incident" description field
-       function toggleLocationFields() {
-    var locationChoice = document.getElementById('location_choice').value;
-    var manualLocation = document.getElementById('manual_location');
 
-    if (locationChoice === 'manual') {
-        manualLocation.style.display = 'block';
-        document.getElementById('latitude').value = '';
-        document.getElementById('longitude').value = '';
-    } else {
-        manualLocation.style.display = 'none';
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                document.getElementById('latitude').value = position.coords.latitude;
-                document.getElementById('longitude').value = position.coords.longitude;
-            }, function () {
-                alert('Unable to retrieve your location.');
-            });
-        } else {
-            alert('Geolocation is not supported by your browser.');
+        function toggleLocationFields() {
+            var locationChoice = document.getElementById('location_choice').value;
+            var manualLocation = document.getElementById('manual_location');
+
+            if (locationChoice === 'manual') {
+                manualLocation.style.display = 'block';
+                document.getElementById('latitude').value = '';
+                document.getElementById('longitude').value = '';
+            } else {
+                manualLocation.style.display = 'none';
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        document.getElementById('latitude').value = position.coords.latitude;
+                        document.getElementById('longitude').value = position.coords.longitude;
+                    }, function () {
+                        alert('Unable to retrieve your location.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by your browser.');
+                }
+            }
         }
-    }
-}
-
-        
     </script>
-</body>
-</html>
+</body
