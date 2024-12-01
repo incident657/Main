@@ -377,10 +377,6 @@ thead th {
             <tbody>
                {% for report in reports %}
     <tr id="report-{{ report.id }}" class="{% if report.severity_type == 'Critical' and report.urgency_type == 'Immediate' %}critical{% endif %} {% if report.id == selected_report_id %}highlight{% endif %}">
-        {% if highlight_report_id and highlight_report_id|int == report.id %} 
-        style="background-color: #ffff99;" 
-    {% endif %}
-    onclick="markAsReadAndNavigate({{ report.notifications[0].id if report.notifications else 'null' }}, {{ report.id }})">
         <td>{{ report.username if not report.anonymous else "Anonymous" }}</td>
         <td>{{ report.title }}</td>
         <td>
