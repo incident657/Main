@@ -128,7 +128,7 @@ def submit_report():
     username = None if anonymous else session.get('username')
 
     try:
-        timestamp = datetime.strptime(report_date, '%b %d, %YT%H:%M')
+        timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
     except ValueError:
         timestamp = None
             
@@ -244,8 +244,8 @@ def admin_reports():
         # Add extra attributes for display
         for report in reports:
             if report.timestamp:
-                report.date = report.timestamp.strftime('%Y-%m-%d')
-                report.time = report.timestamp.strftime('%H:%M')
+                report.date = report.timestamp.strftime('%b %d, %Y')
+                report.time = report.timestamp.strftime('%I:%M %p')
 
         # Determine if any critical and immediate report exists
         warning_sign = any(
