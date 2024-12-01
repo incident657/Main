@@ -449,16 +449,16 @@ function fetchNotifications() {
             notificationCount.textContent = data.length;
 
             // Populate the dropdown
-           notificationList.innerHTML = data.map(n => 
-    `<li onclick="markAsRead(${n.id}, ${n.report_id})">${n.message}</li>`
-).join('');
-
+            notificationList.innerHTML = data.map(n => 
+                `<li onclick="markAsRead(${n.id}, ${n.report_id})">${n.message}</li>`
+            ).join('');
 
             // Play sound if new notifications arrive
             if (data.length > 0) {
                 document.getElementById('notification-sound').play();
             }
-        });
+        })
+        .catch(error => console.error('Error fetching notifications:', error));
 }
 
 // Mark notification as read
