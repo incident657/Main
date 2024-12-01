@@ -215,14 +215,17 @@ def get_notifications():
     } for n in notifications])
 
 # Mark a notification as read
-@app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
-def mark_notification_as_read(notification_id):
-    notification = Notification.query.get(notification_id)
-    if notification:
-        notification.is_read = True
-        db.session.commit()
-        return jsonify({"success": True, "report_id": notification.report_id})
-    return jsonify({"success": False}), 404
+// Mark notification as read and navigate to the report
+function markAsReadAndNavigate(notificationId, reportId) {
+    fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to the specific report page with a highlight parameter
+                window.location.href = `/admin_reports?highlight=${reportId}`;
+            }
+        });
+}
+
 
 # Add a new report (for testing purposes)
 @app.route('/add_report', methods=['POST'])
