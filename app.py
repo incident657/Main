@@ -32,7 +32,7 @@ class AuditTrail(db.Model):
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
-    report_id = db.Column(db.Integer, db.ForeignKey('report.id'))  # Link to the report
+    report_id = db.Column(db.Integer, nullable=True)  # Link to the report
     is_read = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
@@ -168,6 +168,11 @@ def submit_report():
     db.session.add(new_report)
     db.session.commit()
 
+    notification_message = f"New incident reported: {report_title}"
+    notification = Notification(message=notification_message, report_id=new_report.id)
+    db.session.add(notification)
+    db.session.commit()
+
      # Flash a success message and redirect to the Thank You page
     flash("Report submitted successfully!", "success")
     return redirect(url_for('thank_you', anonymous='true' if anonymous else 'false'))
@@ -211,10 +216,10 @@ def get_notifications():
         "message": n.message,
         "report_id": n.report_id
     } for n in notifications])
-
+    
 # Mark a notification as read
 @app.route('/notifications/mark_read/<int:notification_id>', methods=['POST'])
-def mark_notification_read(notification_id):
+def mark_notification_as_read(notification_id):
     notification = Notification.query.get(notification_id)
     if notification:
         notification.is_read = True
@@ -223,22 +228,15 @@ def mark_notification_read(notification_id):
     return jsonify({"success": False}), 404
 
 # Add a new report (for testing purposes)
-@app.route('/add_report', methods=['POST'])
+@@app.route('/add_report', methods=['POST'])
 def add_report():
     report_title = request.form.get('report_title')
-    report_location = request.form.get('report_location')
-    # Other form processing logic...
-    new_report = Report(title=report_title, location=report_location)
-    db.session.add(new_report)
-    db.session.commit()
-
-    # Create a notification for the new report
     notification_message = f"New incident reported: {report_title}"
-    new_notification = Notification(message=notification_message, report_id=new_report.id)
+    new_notification = Notification(message=notification_message, report_id=123)  # Replace 123 with actual report ID
     db.session.add(new_notification)
     db.session.commit()
-
     return redirect(url_for('admin_reports'))
+
 
 # Database setup
 @app.before_request
