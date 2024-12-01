@@ -9,18 +9,12 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
 app = Flask(__name__)
-# Initialize extensions globally
-db = SQLAlchemy()
-migrate = Migrate()
 
 UPLOAD_FOLDER = 'static/upload_files'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     # Configuration settings
     app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
@@ -30,8 +24,11 @@ def allowed_file(filename):
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     # Initialize extensions with app
-    db.init_app(app)
-    migrate.init_app(app, db)
+    db = SQLAlchemy(app)  # Initialize db with app
+    migrate = Migrate(app, db)  # Initialize migrate with app and db
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 class Notification(db.Model):
