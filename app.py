@@ -190,7 +190,7 @@ def thank_you():
 def thank_you_report(report_id):
     report = Report.query.get_or_404(report_id)
     audit_trail = AuditTrail.query.filter_by(report_id=report.id).all()
-    return render_template('thank_you.html', report=report, audit_trail=audit_trail)
+    return render_template('Thank_you.html', report=report, audit_trail=audit_trail)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
