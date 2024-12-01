@@ -383,13 +383,14 @@ thead th {
         <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
         <td>{{ report.description }}</td>
         <td>
-    {% if report.notifications %}
-        <a href="javascript:void(0)" onclick="markAsRead({{ report.notifications[0].id }}, {{ report.id }})">Mark as Read</a>
-    {% else %}
-        No notifications
-    {% endif %}
-</td>
-
+        {% if report.notifications %}
+            <a href="javascript:void(0)" onclick="markAsRead({{ report.notifications[0].id }}, {{ report.id }})">
+                Mark as Read
+            </a>
+        {% else %}
+            No notifications
+        {% endif %}
+    </td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
         <td>
@@ -470,12 +471,12 @@ thead th {
 }
 
 // Mark notification as read
-function markAsRead(notificationId, reportId) {
+function markAsRead(notificationId) {
     fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
-        .then(response => {
-            if (response.ok) {
-                // Redirect to the specific report page with a highlight parameter
-                window.location.href = `/admin_reports?highlight=${reportId}`;
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = `/admin_reports?highlight=${data.report_id}`;
             }
         });
 }
