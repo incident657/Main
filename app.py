@@ -11,15 +11,15 @@ from flask import send_from_directory
 app = Flask(__name__)
 
     # Configuration settings
-    UPLOAD_FOLDER = 'static/upload_files'
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
-    app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///mydatabase.db')  # Fallback for local development
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+UPLOAD_FOLDER = 'static/upload_files'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi', 'mov', 'pdf', 'docx'}
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///mydatabase.db')  # Fallback for local development
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-    if not os.path.exists(UPLOAD_FOLDER):
+if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
     # Initialize extensions with app
