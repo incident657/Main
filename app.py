@@ -35,8 +35,6 @@ class Notification(db.Model):
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'))  # Link to the report
     is_read = db.Column(db.Boolean, default=False)
 
-    report = db.relationship('Report', backref='notifications')
-
     def __repr__(self):
         return f'<Notification {self.id}>'
 
