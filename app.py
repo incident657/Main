@@ -228,7 +228,7 @@ def mark_notification_as_read(notification_id):
     return jsonify({"success": False}), 404
 
 # Add a new report (for testing purposes)
-@@app.route('/add_report', methods=['POST'])
+@app.route('/add_report', methods=['POST'])
 def add_report():
     report_title = request.form.get('report_title')
     notification_message = f"New incident reported: {report_title}"
