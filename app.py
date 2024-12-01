@@ -60,6 +60,7 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
+    uploaded_files = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return f"<Report {self.title}>"
@@ -142,19 +143,14 @@ def submit_report():
     except ValueError:
         timestamp = None
 
-    uploaded_files = request.files.getlist('file')  # Allow multiple files
+     uploaded_files = request.files.getlist('file')  # Get the list of uploaded files
     saved_files = []
     for file in uploaded_files:
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            saved_files.append(f'<a href="/uploads/{filename}">{filename}</a>')  # Store clickable file link in description
-
-    # Append file links to the description
-    if saved_files:
-        report_description += "<br>" + "<br>".join(saved_files)
-
+            file.save(file_path)  # Save the file in the upload folder
+            saved_files.append(filename)  # Add file name to the list
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
     longitude = request.form.get('longitude')
@@ -179,6 +175,7 @@ def submit_report():
         incident_type=incident_type,
         severity_type=severity_type,
         urgency_type=urgency_type,
+        uploaded_files=",".join(saved_files)
     )
     db.session.add(new_report)
     db.session.commit()
@@ -259,9 +256,7 @@ def notification_page():
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    # Adjust the path to your file storage
-    file_path = os.path.join('path_to_your_files', filename)
-    return send_from_directory(os.path.dirname(file_path), os.path.basename(file_path))
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 @app.route('/admin_reports')
 def admin_reports():
