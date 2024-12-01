@@ -143,7 +143,7 @@ def submit_report():
     except ValueError:
         timestamp = None
 
-     uploaded_files = request.files.getlist('file')  # Get the list of uploaded files
+    uploaded_files = request.files.getlist('file')  # Get the list of uploaded files
     saved_files = []
     for file in uploaded_files:
         if file and allowed_file(file.filename):
