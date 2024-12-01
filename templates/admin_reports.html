@@ -449,11 +449,10 @@ function fetchNotifications() {
             notificationCount.textContent = data.length;
 
             // Populate the dropdown
-            notificationList.innerHTML = data.map(n => 
-                <li onclick="markAsRead(${n.id}, ${n.report_id})">
-                    ${n.message}
-                </li>
-            ).join('');
+           notificationList.innerHTML = data.map(n => 
+    `<li onclick="markAsRead(${n.id}, ${n.report_id})">${n.message}</li>`
+).join('');
+
 
             // Play sound if new notifications arrive
             if (data.length > 0) {
@@ -464,7 +463,7 @@ function fetchNotifications() {
 
 // Mark notification as read
 function markAsRead(notificationId, reportId) {
-    fetch(/notifications/mark_read/${notificationId}, { method: 'POST' })
+    fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
         .then(response => {
             if (response.ok) {
                 // Redirect to the specific report and highlight it
