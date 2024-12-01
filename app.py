@@ -215,16 +215,14 @@ def get_notifications():
     } for n in notifications])
 
 # Mark a notification as read
-// Mark notification as read and navigate to the report
-function markAsReadAndNavigate(notificationId, reportId) {
-    fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
-        .then(response => {
-            if (response.ok) {
-                // Redirect to the specific report page with a highlight parameter
-                window.location.href = `/admin_reports?highlight=${reportId}`;
-            }
-        });
-}
+@app.route('/mark_report_old/<int:report_id>', methods=['POST'])
+def mark_report_old(report_id):
+    report = Report.query.get(report_id)
+    if report:
+        report.is_new = False
+        db.session.commit()
+        return jsonify({"success": True})
+    return jsonify({"success": False}), 404
 
 
 # Add a new report (for testing purposes)
