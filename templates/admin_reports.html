@@ -380,7 +380,7 @@ thead th {
         <td>{{ report.urgency_type }}</td>
         <td>{{ report.location }}</td>
         <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
-        <td>{{ report.timestamp.strftime('%H:%M:%S') }}</td>
+        <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
         <td>{{ report.description }}</td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
