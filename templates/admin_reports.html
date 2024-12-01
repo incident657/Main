@@ -340,18 +340,12 @@ thead th {
     <span class="notification-word" onclick="window.location.href='/notification.html'">Notification</span>
     <span class="count" id="notification-count"></span>
     <div class="notifications-dropdown" id="notifications-dropdown">
-        <ul id="notification-list">
-    {% for report in reports %}
-    <li onclick="markAsReadAndNavigate({{ report.notifications[0].id }}, {{ report.id }})">
-        {{ report.title }} - {{ report.time }}
-    </li>
-    {% endfor %}
-</ul>
+        <ul id="notification-list"></ul>
     </div>
 </div>
 
 <!-- Sound for notifications -->
-<audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
+<audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio> 
 
         <!-- Reports Table -->
         <div class="table-container">
@@ -444,8 +438,7 @@ thead th {
     </div>
 
     <script>
-
-      function fetchNotifications() {
+function fetchNotifications() {
     fetch('/notifications')
         .then(response => response.json())
         .then(data => {
@@ -456,11 +449,11 @@ thead th {
             notificationCount.textContent = data.length;
 
             // Populate the dropdown
-            notificationList.innerHTML = data.map(n => `
+            notificationList.innerHTML = data.map(n => 
                 <li onclick="markAsRead(${n.id}, ${n.report_id})">
                     ${n.message}
                 </li>
-            `).join('');
+            ).join('');
 
             // Play sound if new notifications arrive
             if (data.length > 0) {
@@ -470,20 +463,16 @@ thead th {
 }
 
 // Mark notification as read
-function markAsReadAndNavigate(notificationId, reportId) {
-    if (notificationId !== 'null' && notificationId) {
-        fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = `/admin_reports?highlight=${reportId}`;
-                }
-            });
-    } else {
-        // Handle case where there are no notifications
-        window.location.href = `/admin_reports?highlight=${reportId}`;
-    }
+function markAsRead(notificationId, reportId) {
+    fetch(/notifications/mark_read/${notificationId}, { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to the specific report and highlight it
+                window.location.href = /reports/${reportId};
+            }
+        });
 }
+
 // Toggle notifications dropdown
 function toggleNotifications() {
     const dropdown = document.getElementById('notifications-dropdown');
@@ -492,13 +481,13 @@ function toggleNotifications() {
 
 // Initial fetch
 fetchNotifications();
-setInterval(fetchNotifications, 30000);
+setInterval(fetchNotifications, 60000);
 
          // Highlight specific report if parameter is provided
-     const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
     const highlightId = urlParams.get('highlight');
     if (highlightId) {
-        const reportRow = document.getElementById(`report-${highlightId}`);
+        const reportRow = document.getElementById(report-${highlightId});
         if (reportRow) {
             reportRow.style.backgroundColor = "#ffff99"; // Light yellow
         }
