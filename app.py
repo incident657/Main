@@ -168,11 +168,6 @@ def submit_report():
     db.session.add(new_report)
     db.session.commit()
 
-    notification_message = f"New incident reported: {report_title}"
-    notification = Notification(message=notification_message, report_id=new_report.id)
-    db.session.add(notification)
-    db.session.commit()
-
      # Flash a success message and redirect to the Thank You page
     flash("Report submitted successfully!", "success")
     return redirect(url_for('thank_you', anonymous='true' if anonymous else 'false'))
@@ -231,10 +226,18 @@ def mark_notification_as_read(notification_id):
 @app.route('/add_report', methods=['POST'])
 def add_report():
     report_title = request.form.get('report_title')
+    report_location = request.form.get('report_location')
+    # Other form processing logic...
+    new_report = Report(title=report_title, location=report_location)
+    db.session.add(new_report)
+    db.session.commit()
+
+    # Create a notification for the new report
     notification_message = f"New incident reported: {report_title}"
-    new_notification = Notification(message=notification_message, report_id=123)  # Replace 123 with actual report ID
+    new_notification = Notification(message=notification_message, report_id=new_report.id)
     db.session.add(new_notification)
     db.session.commit()
+
     return redirect(url_for('admin_reports'))
 
 # Database setup
