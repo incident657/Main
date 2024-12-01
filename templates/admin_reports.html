@@ -349,7 +349,7 @@ thead th {
 
         <!-- Reports Table -->
         <div class="table-container">
-        <table>
+        <table id="reports-table">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -488,7 +488,7 @@ function toggleNotifications() {
 
 // Initial fetch
 fetchNotifications();
-setInterval(fetchNotifications, 60000);
+setInterval(fetchNotifications, 30000);
 
          // Highlight specific report if parameter is provided
      const urlParams = new URLSearchParams(window.location.search);
@@ -548,6 +548,43 @@ setInterval(fetchNotifications, 60000);
             });
             sound.play();
         }
+
+        let lastSeenTimestamp = new Date().toISOString(); // Initialize with the current time
+
+function fetchNewReports() {
+    fetch(`/fetch_new_reports?last_timestamp=${lastSeenTimestamp}`)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#reports-table tbody');
+
+            data.forEach(report => {
+                const newRow = document.createElement('tr');
+                newRow.id = `report-${report.id}`;
+                newRow.innerHTML = `
+                    <td>${report.title}</td>
+                    <td>${report.location}</td>
+                    <td>New</td>
+                `;
+                tableBody.prepend(newRow); // Add new rows to the top
+
+                // Highlight the new row
+                newRow.style.backgroundColor = "#ffff99"; // Light yellow
+                setTimeout(() => {
+                    newRow.style.backgroundColor = ""; // Reset after 5 seconds
+                }, 5000);
+            });
+
+            // Update the last seen timestamp to the latest report
+            if (data.length > 0) {
+                lastSeenTimestamp = data[data.length - 1].timestamp;
+            }
+        })
+        .catch(err => console.error("Error fetching new reports:", err));
+}
+
+// Poll for new reports every 10 seconds
+setInterval(fetchNewReports, 10000);
+
     </script>
 </body>
 </html
