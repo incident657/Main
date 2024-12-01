@@ -20,6 +20,11 @@ h2 {
     color: #ff4d4d;
     font-size: 2.5em;
     font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: #333; /* Matches background */
+    z-index: 1000; /* Ensure it stays above other content */
+    padding: 10px 0;
 }
 
 .container {
@@ -42,7 +47,7 @@ h2 {
     align-items: center;
     margin-bottom: 20px;
     position: sticky;
-    top: 0;
+    top: 70px; /* Adjust based on the height of your title */
     z-index: 1000;
     background-color: #333; /* Match background */
     padding: 10px 0;
@@ -195,7 +200,7 @@ th:nth-child(14), td:nth-child(14) { /* Remove */
 /* Filters Bar and Other Components */
 .filters-bar {
     position: fixed;
-    bottom: 20px;
+    top: 100px; /* Position below the title */
     left: 20px;
     background-color: #333;
     padding: 10px;
