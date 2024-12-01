@@ -222,7 +222,6 @@ def mark_report_old(report_id):
         return jsonify({"success": True})
     return jsonify({"success": False}), 404
 
-
 # Add a new report (for testing purposes)
 @app.route('/add_report', methods=['POST'])
 def add_report():
