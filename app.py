@@ -27,10 +27,6 @@ if not os.path.exists(UPLOAD_FOLDER):
     db = SQLAlchemy(app)  # Initialize db with app
     migrate = Migrate(app, db)  # Initialize migrate with app and db
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
@@ -72,6 +68,10 @@ class Report(db.Model):
 # Initialize the database
 with app.app_context():
     db.create_all()
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Geocoding function
 geolocator = Nominatim(user_agent="incident_reporting")
