@@ -20,10 +20,6 @@ if not os.path.exists(UPLOAD_FOLDER):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Application Factory
-def create_app():
-    app = Flask(__name__)
-
     # Configuration settings
     app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default fallback
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///mydatabase.db')  # Fallback for local development
@@ -35,14 +31,6 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Define routes
-    @app.route('/')
-    def index():
-        return "Hello, Flask!"
-
-    # Additional routes and blueprints can be registered here
-
-    return app
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,8 +66,6 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
-    uploaded_files = db.Column(db.String(500), nullable=True)  # Stores file names as a comma-separated string
-
 
     def __repr__(self):
         return f"<Report {self.title}>"
@@ -165,7 +151,11 @@ def submit_report():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            saved_files.append(filename)  # Save filenames to link with the report
+            saved_files.append(f'<a href="/uploads/{filename}">{filename}</a>')  # Store clickable file link in description
+
+    # Append file links to the description
+    if saved_files:
+        report_description += "<br>" + "<br>".join(saved_files)
 
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
