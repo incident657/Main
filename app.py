@@ -63,6 +63,7 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
+    notifications = db.relationship('Notification', backref='report', lazy=True)
 
     def __repr__(self):
         return f"<Report {self.title}>"
