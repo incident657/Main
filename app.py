@@ -19,16 +19,6 @@ app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
 db = SQLAlchemy(app)  # Initialize db with app
 migrate = Migrate(app, db)  # Initialize migrate with app and db
 
-class AuditTrail(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), nullable=False)
-    action = db.Column(db.String(255), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-    time = db.Column(db.DateTime, default=datetime.utcnow)
-    performed_by = db.Column(db.String(50))
-
-    report = db.relationship('Report', backref=db.backref('audit_trail', lazy=True))
-
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
@@ -236,8 +226,7 @@ def add_report():
     db.session.add(new_notification)
     db.session.commit()
     return redirect(url_for('admin_reports'))
-
-
+    
 # Database setup
 @app.before_request
 def setup_db():
@@ -338,16 +327,6 @@ def search_filter_reports():
 def mark_as_done(id):
     report = Report.query.get_or_404(id)
     report.status = 'Resolved'
-
-    # Create an audit trail entry
-    audit = AuditTrail(
-        report_id=report.id,
-        action="Report marked as resolved",
-        performed_by="Admin",  # You can adjust this based on the logged-in user
-    )
-    db.session.add(audit)
-    db.session.commit()
-
     return redirect(url_for('admin_reports'))
 
 @app.route('/update_incident_type/<int:id>', methods=['POST'])
