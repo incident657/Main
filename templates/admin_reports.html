@@ -382,6 +382,7 @@ thead th {
         <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
         <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
         <td>{{ report.description }}</td>
+        <td><a href="javascript:void(0)" onclick="markAsRead({{ notification.id }}, {{ report.id }})">Mark as Read</a></td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
         <td>
@@ -466,8 +467,8 @@ function markAsRead(notificationId, reportId) {
     fetch(`/notifications/mark_read/${notificationId}`, { method: 'POST' })
         .then(response => {
             if (response.ok) {
-                // Redirect to the specific report and highlight it
-                window.location.href = `/reports/${reportId}`;
+                // Redirect to the specific report page with a highlight parameter
+                window.location.href = `/admin_reports?highlight=${reportId}`;
             }
         });
 }
@@ -483,7 +484,7 @@ fetchNotifications();
 setInterval(fetchNotifications, 60000);
 
          // Highlight specific report if parameter is provided
-    const urlParams = new URLSearchParams(window.location.search);
+     const urlParams = new URLSearchParams(window.location.search);
     const highlightId = urlParams.get('highlight');
     if (highlightId) {
         const reportRow = document.getElementById(`report-${highlightId}`);
