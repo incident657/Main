@@ -32,6 +32,7 @@ h2 {
     position: relative;
     max-height: 80vh; /* Prevent the entire table from overflowing vertically */
     overflow: auto;  /* Allow scrolling */
+    overflow-x: auto;
 }
 
 /* Sticky Title (Admin Reports) and Search Bar */
@@ -113,60 +114,61 @@ th, td {
 }
 
 /* Column Widths - Specific to Columns */
+/* Column Widths - Fixed to Specific Values */
 th:nth-child(1), td:nth-child(1) { /* Username */
-    min-width: 200px;
+    width: 150px; /* Adjust as needed */
 }
 
 th:nth-child(2), td:nth-child(2) { /* Title */
-    min-width: 300px;
+    width: 250px;
 }
 
 th:nth-child(3), td:nth-child(3) { /* Incident Type */
-    min-width: 250px;
+    width: 200px;
 }
 
 th:nth-child(4), td:nth-child(4) { /* Severity Type */
-    min-width: 200px;
+    width: 150px;
 }
 
 th:nth-child(5), td:nth-child(5) { /* Urgency Type */
-    min-width: 200px;
+    width: 150px;
 }
 
 th:nth-child(6), td:nth-child(6) { /* Location */
-    min-width: 300px;
+    width: 250px;
 }
 
 th:nth-child(7), td:nth-child(7) { /* Date */
-    min-width: 150px;
+    width: 120px;
 }
 
 th:nth-child(8), td:nth-child(8) { /* Time */
-    min-width: 150px;
+    width: 100px;
 }
 
 th:nth-child(9), td:nth-child(9) { /* Description */
-    min-width: 400px; /* Wider for more content */
+    width: 400px; /* Allocate more space for text-heavy content */
 }
 
 th:nth-child(10), td:nth-child(10) { /* Anonymous */
-    min-width: 150px;
+    width: 100px;
 }
 
 th:nth-child(11), td:nth-child(11) { /* Status */
-    min-width: 200px;
+    width: 150px;
 }
 
 th:nth-child(12), td:nth-child(12) { /* Actions */
-    min-width: 150px;
+    width: 120px;
 }
 
 th:nth-child(13), td:nth-child(13) { /* Locate */
-    min-width: 150px;
+    width: 120px;
 }
 
 th:nth-child(14), td:nth-child(14) { /* Remove */
-    min-width: 150px;
+    width: 120px;
 }
 
 /* Filters Bar and Other Components */
