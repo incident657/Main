@@ -30,14 +30,18 @@ h2 {
     padding: 20px;
     border-radius: 10px;
     position: relative;
-    overflow-x: auto;
-    max-height: 80vh;  /* Makes the container scrollable */
+    max-height: 80vh;  /* Makes the container scrollable vertically */
+    overflow: hidden;  /* Prevent scrollbars on the container itself */
 }
 
 .search-form {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    background-color: #333;
+    z-index: 5;  /* Keep the search form on top */
 }
 
 .search-form input[type="text"] {
@@ -72,6 +76,14 @@ h2 {
     text-align: center;
     margin-top: 20px;
     font-weight: bold;
+}
+
+/* Table styling */
+.table-container {
+    overflow-x: auto;  /* Horizontal scroll */
+    overflow-y: auto;  /* Vertical scroll */
+    max-height: 60vh;  /* Limits the table's vertical height, enabling vertical scroll */
+    margin-top: 20px;
 }
 
 table {
@@ -273,27 +285,6 @@ tr:hover {
 
 .filters-container button:hover {
     background-color: #e60000;
-}
-
-/* Horizontal scrolling container */
-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
-th, td {
-    min-width: 150px;  /* Expands columns for better visibility */
-}
-
-th {
-    background-color: #444;
-    color: #fff;
-    font-weight: bold;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Adds shadow for sticky effect */
 }
 
 /* Change Feedback to white */
