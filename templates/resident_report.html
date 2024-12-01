@@ -5,91 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resident Incident Report</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: url('static/red.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #f0f0f0;  /* Lighter text for contrast */
-            line-height: 1.6;
-        }
+       body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('static/red.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    line-height: 1.6;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: rgba(0, 0, 0, 0.7);  /* Darkened background */
-            border-radius: 8px;
-            padding: 20px 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        }
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: rgba(0, 0, 0, 0.8); /* Dark background to make the form stand out */
+    color: white; /* White text for readability */
+    border-radius: 8px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        .container h1 {
-            text-align: center;
-            color: #e63946;  /* Red color */
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
+.container h1 {
+    text-align: center;
+    color: red; /* Red title color to match the theme */
+    font-size: 28px;
+    margin-bottom: 10px;
+}
 
-        .container p {
-            text-align: center;
-            font-size: 14px;
-            color: #f0f0f0;
-            margin-bottom: 20px;
-        }
+.container p {
+    text-align: center;
+    font-size: 14px;
+    color: #ccc; /* Light gray text for description */
+    margin-bottom: 20px;
+}
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+form {
+    display: flex;
+    flex-direction: column;
+}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+.form-group {
+    margin-bottom: 20px;
+}
 
-        .form-group label {
-            font-weight: bold;
-            color: #f0f0f0;
-            margin-bottom: 8px;
-            display: block;
-        }
+.form-group label {
+    font-weight: bold;
+    color: white; /* White label text for contrast */
+    margin-bottom: 8px;
+    display: block;
+}
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #333;
-            background-color: #444;  /* Darker background for inputs */
-        }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444; /* Dark border for input fields */
+    border-radius: 5px;
+    font-size: 14px;
+    color: white; /* White text inside inputs */
+    background-color: #333; /* Dark background for input fields */
+}
 
-        .form-group textarea {
-            resize: none;
-        }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: red; /* Highlight the input fields with red when focused */
+    background-color: #444; /* Slightly lighter background on focus */
+}
 
-        .btn-submit {
-            background-color: #e63946;  /* Red button */
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
+.form-group textarea {
+    resize: none;
+}
 
-        .btn-submit:hover {
-            background-color: #d62828;  /* Darker red on hover */
-        }
+.btn-submit {
+    background-color: red; /* Red button background */
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
 
-        .footer-note {
-            text-align: center;
-            font-size: 12px;
-            color: #f0f0f0;
-            margin-top: 20px;
-        }
+.btn-submit:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+.footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: #ccc; /* Light gray footer text */
+    margin-top: 20px;
+}
 
         .form-group input:focus,
         .form-group select:focus,
