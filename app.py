@@ -63,7 +63,6 @@ class Report(db.Model):
     severity_type = db.Column(db.String(50))
     urgency_type = db.Column(db.String(50))
     status = db.Column(db.String(50), default='pending')
-    notifications = db.relationship('Notification', backref='report', lazy=True)
 
     def __repr__(self):
         return f"<Report {self.title}>"
@@ -255,14 +254,16 @@ def notification_page():
 def admin_reports():
     if session.get('role') != 'admin':
         return redirect('/')
-    try:
-        reports = Report.query.all()
 
-        # Add extra attributes for display
+    try:
+        # Fetch all reports ordered by timestamp
+        reports = Report.query.order_by(Report.timestamp.desc()).all()
+
+        # Process each report to include extra attributes for display
         for report in reports:
             if report.timestamp:
-                report.date = report.timestamp.strftime('%b %d, %Y')
-                report.time = report.timestamp.strftime('%I:%M %p')
+                report.date = report.timestamp.strftime('%b %d, %Y')  # e.g., Dec 01, 2024
+                report.time = report.timestamp.strftime('%I:%M %p')  # e.g., 03:45 PM
 
         # Determine if any critical and immediate report exists
         warning_sign = any(
@@ -280,6 +281,7 @@ def admin_reports():
             highlight_report_id=highlight_report_id
         )
     except Exception as e:
+        # Log and handle errors gracefully
         app.logger.error(f"Error in admin_reports: {e}")
         flash("An error occurred while fetching admin reports.", "error")
         return render_template('error.html')  # Render an error page for graceful handling
@@ -372,6 +374,22 @@ def locate_report(report_id):
     else:
         flash("No location data available for this report.", "error")
         return redirect('/admin_reports')
+
+@app.route('/fetch_new_reports', methods=['GET'])
+def fetch_new_reports():
+    # Get the last seen timestamp from the frontend
+    last_timestamp = request.args.get('last_timestamp')
+    last_seen_time = datetime.fromisoformat(last_timestamp) if last_timestamp else datetime.min
+
+    # Fetch reports added after the last seen timestamp
+    new_reports = Report.query.filter(Report.timestamp > last_seen_time).order_by(Report.timestamp).all()
+
+    return jsonify([{
+        "id": r.id,
+        "title": r.title,
+        "location": r.location,
+        "timestamp": r.timestamp.isoformat()
+    } for r in new_reports])
         
 @app.route('/health', methods=['GET'])
 def health_check():
