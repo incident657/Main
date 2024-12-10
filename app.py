@@ -166,8 +166,8 @@ def submit_report():
     db.session.commit()
 
     notification_message = f"New incident reported: {report_title}"
-    notification = Notification(message=notification_message, report_id=new_report.id)
-    db.session.add(notification)
+    new_notification = Notification(message=notification_message, report_id=new_report.id)
+    db.session.add(new_notification)
     db.session.commit()
 
      # Flash a success message and redirect to the Thank You page
