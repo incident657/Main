@@ -293,14 +293,14 @@ th:nth-child(14), td:nth-child(14) { /* Remove */
 
           <div class="notification-bell" onclick="toggleNotifications()">
     <span class="notification-word" onclick="window.location.href='/notification.html'">Notification</span>
-    <span class="count" id="notification-count"></span>
+    <span class="count" id="notification-count">0</span> <!-- Default count to 0 -->
     <div class="notifications-dropdown" id="notifications-dropdown">
         <ul id="notification-list"></ul>
     </div>
 </div>
 
 <!-- Sound for notifications -->
-<audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio> 
+<audio id="notification-sound" src="/static/notification.mp3" preload="auto"></audio>
 
         <!-- Reports Table -->
         <div class="table-container">
@@ -388,17 +388,19 @@ th:nth-child(14), td:nth-child(14) { /* Remove */
     </div>
 
     <script>
-function fetchNotifications() {
+        function fetchNotifications() {
     fetch('/notifications')
         .then(response => response.json())
         .then(data => {
-            console.log(data);  // Log the response data to check if notifications are coming through
+            console.log("Notifications data:", data);  // Log the response data to check if notifications are coming through
 
             const notificationCount = document.getElementById('notification-count');
             const notificationList = document.getElementById('notification-list');
 
-            notificationCount.textContent = data.length;
+            // If notifications are empty, set text content to 0
+            notificationCount.textContent = data.length || 0;
 
+            // Clear the list before appending new notifications
             notificationList.innerHTML = data.map(n => 
                 `<li onclick="markAsRead(${n.id}, ${n.report_id})">${n.message}</li>`
             ).join('');
@@ -408,8 +410,6 @@ function fetchNotifications() {
             }
         })
         .catch(error => console.error('Error fetching notifications:', error));
-}
-
 }
 
 // Mark notification as read
@@ -431,7 +431,7 @@ function toggleNotifications() {
 
 // Initial fetch
 fetchNotifications();
-setInterval(fetchNotifications, 60000);
+setInterval(fetchNotifications, 60000);  // Update notifications every 60 seconds
         
           
         function locateResident(latitude, longitude) {
