@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <p>Welcome, {{ session['username'] }}!</p>
     <title>Resident Incident Report</title>
     <style>
        body {
@@ -112,6 +111,7 @@ form {
 <body>
     <div class="container">
         <h1>Incident Report Form</h1>
+        <p>Welcome, {{ session['username'] }}!</p>
         <p>Fill in the details below to report an incident in your area.</p>
         <form action="/submit_report" method="POST">
             <!-- Report Title -->
