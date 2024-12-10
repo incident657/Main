@@ -41,33 +41,35 @@
 
             <!-- Login Form -->
             <form action="/authenticate_user" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" name="username" required>
-    <label for="role">Role:</label>
-    <select name="role" id="role" onchange="togglePasswordField()" required>
-        <option value="resident">Resident</option>
-        <option value="admin">Admin</option>
-    </select>
-    <div id="password-container">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password">
-    </div>
-    <button type="submit">Login</button>
-</form>
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+                
+                <div>
+                    <input type="radio" id="resident" name="role" value="resident" onclick="toggleFields()" required>
+                    <label for="resident">Resident</label>
+                    <input type="radio" id="admin" name="role" value="admin" onclick="toggleFields()" required>
+                    <label for="admin">Admin</label>
+                </div>
+                
+                <div id="password-container" style="display: none;">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password">
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
         </div>
     </div>
     <script>
-    function togglePasswordField() {
-        const role = document.getElementById('role').value;
-        const passwordContainer = document.getElementById('password-container');
-        if (role === 'resident') {
-            passwordContainer.style.display = 'none';
-            document.getElementById('password').removeAttribute('required');
-        } else {
-            passwordContainer.style.display = 'block';
-            document.getElementById('password').setAttribute('required', 'required');
+        function toggleFields() {
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const passwordField = document.getElementById('password-container');
+            if (role === 'resident') {
+                passwordField.style.display = 'none';
+            } else {
+                passwordField.style.display = 'block';
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
