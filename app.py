@@ -93,6 +93,7 @@ def authenticate_user():
         session['role'] = 'resident'
         session['username'] = username
         return redirect('/resident_report')
+    
     elif role == 'admin':
         password = request.form.get('password', '')
         # Admins require correct credentials
@@ -100,8 +101,10 @@ def authenticate_user():
             session['role'] = 'admin'
             session['username'] = username
             return redirect('/admin_reports')
-        flash('Invalid admin credentials. Please try again.', 'error')
-        return redirect('/')
+        else:
+            flash('Invalid admin credentials. Please try again.', 'error')
+            return redirect('/')
+    
     flash('Please select a valid role.', 'error')
     return redirect('/')
 
