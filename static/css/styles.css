@@ -1,4 +1,4 @@
-/* General styles */
+/* General Styles */
 body, html {
     margin: 0;
     padding: 0;
@@ -21,14 +21,14 @@ body, html {
     z-index: -1;
 }
 
-/* Overlay to darken the background */
+/* Overlay */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Dim the video with a black overlay */
+    background: rgba(0, 0, 0, 0.6);
     z-index: 0;
 }
 
@@ -48,7 +48,6 @@ body, html {
 .welcome-message {
     width: 50%;
     padding: 20px;
-    text-align: left;
 }
 
 .welcome-message h1 {
@@ -67,60 +66,59 @@ body, html {
     background: rgba(0, 0, 0, 0.8);
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    text-align: left;
 }
 
 .login-container h2 {
-    margin-bottom: 20px;
+    text-align: center;
     color: #fff;
-}
-
-/* Flash Messages */
-.flash-messages {
-    margin: 10px 0;
-    list-style: none;
-    padding: 0;
-}
-
-.flash-messages li {
-    color: #ff0000; /* Red for errors */
-    font-size: 14px;
-    margin: 5px 0;
+    margin-bottom: 20px;
 }
 
 /* Form Styling */
-.login-container form {
+form .form-row {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    margin-bottom: 15px;
 }
 
-.login-container label {
-    text-align: left;
+form label {
+    margin-bottom: 5px;
     font-size: 14px;
     color: #fff;
 }
 
-.login-container input, 
-.login-container select, 
-.login-container button {
-    padding: 10px;
-    font-size: 16px;
+form input[type="text"], 
+form input[type="password"] {
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    width: 100%;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-.login-container button {
-    background: #007BFF;
+.radio-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.radio-group label {
+    margin: 0;
+    font-size: 14px;
     color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
-.login-container button:hover {
-    background: #0056b3;
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
