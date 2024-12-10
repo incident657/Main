@@ -41,34 +41,36 @@
 
             <!-- Login Form -->
             <form action="/authenticate_user" method="POST">
-                <label for="username">Username:</label>
-                <input type="text" name="username" required>
-
-                <div id="password-container" style="display: none;">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password">
+                <div class="form-row">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
                 </div>
-                
-                <div>
-                    <input type="radio" id="resident" name="role" value="resident" onclick="toggleFields()" required>
-                    <label for="resident">Resident</label>
-                    <input type="radio" id="admin" name="role" value="admin" onclick="toggleFields()" required>
-                    <label for="admin">Admin</label>
+
+                <div class="form-row" id="password-container" style="display: none;">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                </div>
+
+                <div class="form-row">
+                    <label>Role:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="resident" name="role" value="resident" onclick="toggleFields()" required>
+                        <label for="resident">Resident</label>
+                        <input type="radio" id="admin" name="role" value="admin" onclick="toggleFields()" required>
+                        <label for="admin">Admin</label>
+                    </div>
                 </div>
 
                 <button type="submit">Login</button>
             </form>
         </div>
     </div>
+
     <script>
         function toggleFields() {
             const role = document.querySelector('input[name="role"]:checked').value;
             const passwordField = document.getElementById('password-container');
-            if (role === 'resident') {
-                passwordField.style.display = 'none';
-            } else {
-                passwordField.style.display = 'block';
-            }
+            passwordField.style.display = role === 'admin' ? 'flex' : 'none';
         }
     </script>
 </body>
