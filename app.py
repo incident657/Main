@@ -84,20 +84,22 @@ def login():
 @app.route('/authenticate_user', methods=['POST'])
 def authenticate_user():
     username = request.form['username']
-    password = request.form['password']
     role = request.form['role']
-
-    if role == 'admin':
+    
+    if role == 'resident':
+        # Residents do not need a password
+        session['role'] = 'resident'
+        session['username'] = username
+        return redirect('/resident_report')
+    elif role == 'admin':
+        password = request.form.get('password', '')
+        # Admins require correct credentials
         if username == 'Emily Joy Flores' and password == 'adminpass':
             session['role'] = 'admin'
             session['username'] = username
             return redirect('/admin_reports')
         flash('Invalid admin credentials. Please try again.', 'error')
         return redirect('/')
-    elif role == 'resident':
-        session['role'] = 'resident'
-        session['username'] = username
-        return redirect('/resident_report')
     flash('Please select a valid role.', 'error')
     return redirect('/')
 
