@@ -7,6 +7,7 @@ from geopy.geocoders import Nominatim
 import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
+import pytz
 
 app = Flask(__name__)
 
@@ -128,9 +129,12 @@ def submit_report():
     username = session.get('username') if not anonymous else None
 
     try:
-        timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
+    timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
+    # Assuming report_date is in UTC, convert it to local time
+    local_tz = pytz.timezone('Asia/Manila')  # Replace with your time zone
+    timestamp = timestamp.replace(tzinfo=pytz.utc).astimezone(local_tz)
     except ValueError:
-        timestamp = None
+    timestamp = None
             
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
@@ -246,6 +250,9 @@ def admin_reports():
     try:
         reports = Report.query.all()
 
+        # Define your local time zone (e.g., Asia/Manila or US/Eastern)
+        local_tz = pytz.timezone('Asia/Manila')
+
         # Handle the case where there are no reports
         if not reports:
             flash("No reports are available.", "info")
@@ -254,8 +261,12 @@ def admin_reports():
         # Process reports if available
         for report in reports:
             if report.timestamp:
-                report.date = report.timestamp.strftime('%b %d, %Y')
-                report.time = report.timestamp.strftime('%I:%M %p')
+                # Convert the timestamp from UTC to local time
+                local_time = report.timestamp.astimezone(local_tz)
+
+                # Format the local time
+                report.date = local_time.strftime('%b %d, %Y')
+                report.time = local_time.strftime('%I:%M %p')
 
         # Check if any report is critical and urgent
         warning_sign = any(
