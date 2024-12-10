@@ -19,6 +19,7 @@ app.config['GOOGLE_MAPS_API_KEY'] = os.getenv('GOOGLE_MAPS_API_KEY')
     # Initialize extensions with app
 db = SQLAlchemy(app)  # Initialize db with app
 migrate = Migrate(app, db)  # Initialize migrate with app and db
+local_tz = pytz.timezone('Asia/Manila')
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -249,9 +250,6 @@ def admin_reports():
         return redirect('/')
     try:
         reports = Report.query.all()
-
-        # Define your local time zone (e.g., Asia/Manila or US/Eastern)
-        local_tz = pytz.timezone('Asia/Manila')
 
         # Handle the case where there are no reports
         if not reports:
