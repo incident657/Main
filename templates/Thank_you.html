@@ -85,34 +85,7 @@
         .feedback-section button:hover {
             background-color: #cc0000;
         }
-        .audit-trail-section {
-            margin-top: 40px;
-            background-color: #222;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        .audit-trail-section h2 {
-            color: red;
-            margin-bottom: 20px;
-        }
-        .audit-trail-table {
-            width: 100%;
-            border-collapse: collapse;
-            color: #ccc;
-        }
-        .audit-trail-table th, .audit-trail-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #444;
-        }
-        .audit-trail-table th {
-            background-color: #444;
-            color: red;
-        }
-        .audit-trail-table td {
-            background-color: #333;
-        }
+       
     </style>
 </head>
 <body>
@@ -134,32 +107,6 @@
                 <textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
                 <button type="submit">Submit Feedback</button>
             </form>
-        </div>
-
-        <!-- Audit Trail Section -->
-        <div class="audit-trail-section">
-            <h2>Audit Trail</h2>
-            <p>Below is a record of the actions taken regarding your report for accountability:</p>
-            <table class="audit-trail-table">
-                <thead>
-                    <tr>
-                        <th>Action</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Performed By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for action in audit_trail %}
-                        <tr>
-                            <td>{{ action.action }}</td>
-                            <td>{{ action.date.strftime('%b %d, %Y') }}</td>
-                            <td>{{ action.time.strftime('%I:%M %p') }}</td>
-                            <td>{{ action.performed_by }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
         
         <!-- Logout button -->
