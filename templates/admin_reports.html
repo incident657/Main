@@ -334,8 +334,8 @@ th:nth-child(14), td:nth-child(14) { /* Remove */
         <td>{{ report.severity_type }}</td>
         <td>{{ report.urgency_type }}</td>
         <td>{{ report.location }}</td>
-        <td>{{ report.timestamp.strftime('%b %d, %Y') }}</td> 
-        <td>{{ report.timestamp.strftime('%I:%M %p') }}</td>
+        <td>{{ report.date }}</td>  <!-- Use the formatted date from the backend -->
+        <td>{{ report.time }}</td>  <!-- Use the formatted time from the backend -->
         <td>{{ report.description }}</td>
         <td>{{ "Yes" if report.anonymous else "No" }}</td>
         <td>{{ report.status }}</td>
