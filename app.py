@@ -207,7 +207,13 @@ def admin_feedbacks():
 
 @app.route('/notifications')
 def get_notifications():
+    # Fetch notifications where 'is_read' is False
     notifications = Notification.query.filter_by(is_read=False).all()
+
+    # Log the notifications to check
+    print("Notifications:", notifications)  # Debugging log
+
+    # Return notifications as JSON
     return jsonify([{
         "id": n.id,
         "message": n.message,
