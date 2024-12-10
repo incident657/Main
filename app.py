@@ -129,12 +129,12 @@ def submit_report():
     username = session.get('username') if not anonymous else None
 
     try:
-    timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
-    # Assuming report_date is in UTC, convert it to local time
-    local_tz = pytz.timezone('Asia/Manila')  # Replace with your time zone
-    timestamp = timestamp.replace(tzinfo=pytz.utc).astimezone(local_tz)
+        timestamp = datetime.strptime(report_date, '%b %d, %YT%I:%M %p')
+        # Assuming report_date is in UTC, convert it to local time
+        local_tz = pytz.timezone('Asia/Manila')  # Replace with your time zone
+        timestamp = timestamp.replace(tzinfo=pytz.utc).astimezone(local_tz)
     except ValueError:
-    timestamp = None
+        timestamp = None
             
     report_location = request.form.get('report_location')
     latitude = request.form.get('latitude')
