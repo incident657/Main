@@ -81,7 +81,7 @@
                     <tr>
                         <td>{{ feedback.username or "Anonymous" }}</td>
                         <td>{{ feedback.feedback }}</td>
-                        <td>{{ feedback.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ feedback.timestamp.strftime('%b %d, %Y    %I:%M %p') }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
